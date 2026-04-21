@@ -1,65 +1,43 @@
-# My Portfolio Website - Overview 🚀
+# Pruthvirajsinh Punada — Portfolio
 
-This repository contains the open-source version of my personal portfolio website.  
-Feel free to explore the code and use it for learning and inspiration.
+Interactive developer portfolio. Particle-text hero with cursor physics,
+bento-grid project showcase with FLIP-animated detail view, 3D tech stack
+with Rapier physics, and a site-wide ambient layer with drifting orbs and
+canvas particles.
 
----
+**Live:** https://portfolio-pruthvi-rosy.vercel.app
 
-## ⚠️ Usage Notice
+## Stack
 
-This project is shared for learning purposes only.
+- **Frontend:** React 18 + TypeScript + Vite
+- **3D / animation:** Three.js, React Three Fiber, drei, @react-three/rapier, @react-three/postprocessing
+- **Scroll & motion:** GSAP, ScrollTrigger, Lenis
+- **Deploy:** Vercel
 
-Please do NOT:
-- Clone or replicate the full website or design
-- Repost it with minor content changes
-- Use this project for commercial/client work
-- Create tutorials or content using this exact project
+## Sections
 
-If you use parts of the code, you must provide proper credit linking back to the original repository.
+- **Particle Hero** — name rendered as GPU particles sampled from canvas, cursor repulsion with spring-back physics, tech logos floating behind with depth blur
+- **About** — profile photo with accent glow + bio
+- **What I Do** — three 3D flip cards covering iOS & SwiftUI, Spatial & visionOS, On-Device AI
+- **Career Timeline** — scroll-scrubbed timeline with glowing dot
+- **My Work** — bento grid of 7 shipped projects; click expands the source card into a cinematic detail modal via a FLIP-style transition
+- **My Tech Stack** — 42 floating physics-simulated balls with 28 unique textures (Apple platforms, project tech, and this site's stack)
+- **Contact** — three-column layout with magnetic social icons
 
-Build your own version — don’t just copy.
+## Local development
 
-— Moncy Yohannan
+```bash
+npm install
+npm run dev
+```
 
----
+Build and preview:
 
-## 🛠️ Instructions
+```bash
+npm run build
+npm run preview
+```
 
-I have modified the GSAP Club plugins using trial versions.  
-⚠️ Note: Trial plugins cannot be used for production or hosting.
+## Credits
 
-For official GSAP Club plugins, refer here:  
-https://gsap.com/docs/v3/Installation/
-
----
-
-## ⚙️ Tech Stack
-
-React • TypeScript • GSAP • Three.js • WebGL • HTML • CSS • JavaScript
-
----
-
-## 🎨 Assets Usage
-
-Some 3D assets included in this repository are free to use for learning purposes.
-
-However:
-
-- The original 3D avatar used on my live portfolio is NOT included in this repository
-- That avatar is a custom asset created over ~1 month
-- It is not open source and not available for reuse
-
-Any usage, extraction, or redistribution of that avatar from my live website is strictly prohibited.
-
----
-
-![Protfolio-Preview](https://github.com/user-attachments/assets/3c4557e7-6392-4928-b8a9-7b2476ef4edd)
-
----
-
-## 📄 License
-
-This project is licensed under the Personal Portfolio License (PPL) v1.0.
-
-See the LICENSE file for full details
-
+Built on the open-source structure by [Moncy Yohannan](https://github.com/MoncyDev/Portfolio-Website) — redesigned end-to-end for my own content, interactions, and visual identity.
