@@ -3,70 +3,91 @@ import "./styles/Contact.css";
 
 const Contact = () => {
   return (
-    <div className="contact-section section-container" id="contact">
+    <section className="contact-section" id="contact">
       <div className="contact-container">
-        <h3>Contact</h3>
-        <div className="contact-flex">
-          <div className="contact-box">
-            <h4>Email</h4>
-            <p>
-              <a href="mailto:example@mail.com" data-cursor="disable">
-                example@mail.com
+        <header className="contact-head">
+          <span className="contact-kicker">// get in touch</span>
+          <h2 className="contact-title">
+            Let's <span className="contact-title-accent">build</span> something.
+          </h2>
+          <p className="contact-lede">
+            Open to iOS, visionOS, and ML roles — collaborations and chats
+            equally welcome.
+          </p>
+        </header>
+
+        <div className="contact-grid">
+          <div className="contact-col">
+            <div className="contact-block">
+              <span className="contact-label">Email</span>
+              <a
+                href="mailto:pruthviraj1022004@gmail.com"
+                className="contact-value"
+                data-cursor="disable"
+              >
+                pruthviraj1022004@gmail.com
               </a>
-            </p>
-            <h4>Phone</h4>
-            <p>
-              <a href="tel:+9199999999" data-cursor="disable">
-                +91 99999 99999
+            </div>
+            <div className="contact-block">
+              <span className="contact-label">Phone</span>
+              <a
+                href="tel:+393755775010"
+                className="contact-value"
+                data-cursor="disable"
+              >
+                +39 375 577 5010
               </a>
+            </div>
+            <div className="contact-block">
+              <span className="contact-label">Location</span>
+              <span className="contact-value">Caserta · Naples, Italy</span>
+            </div>
+          </div>
+
+          <div className="contact-col">
+            <span className="contact-label">Social</span>
+            <a
+              href="https://github.com/pruthvirajsinhpunada"
+              target="_blank"
+              rel="noreferrer"
+              data-cursor="disable"
+              className="contact-social"
+            >
+              <span>GitHub</span>
+              <MdArrowOutward />
+            </a>
+            <a
+              href="https://www.linkedin.com/in/punada-pruthviraj-4ba704239/"
+              target="_blank"
+              rel="noreferrer"
+              data-cursor="disable"
+              className="contact-social"
+            >
+              <span>LinkedIn</span>
+              <MdArrowOutward />
+            </a>
+            <a
+              href="mailto:pruthviraj1022004@gmail.com"
+              data-cursor="disable"
+              className="contact-social"
+            >
+              <span>Email</span>
+              <MdArrowOutward />
+            </a>
+          </div>
+
+          <div className="contact-col contact-col-colo">
+            <p className="contact-colo">
+              Designed &amp; developed by{" "}
+              <span>Pruthvirajsinh Punada</span>
             </p>
-          </div>
-          <div className="contact-box">
-            <h4>Social</h4>
-            <a
-              href="https://github.com"
-              target="_blank"
-              data-cursor="disable"
-              className="contact-social"
-            >
-              Github <MdArrowOutward />
-            </a>
-            <a
-              href="https://www.linkedin.com"
-              target="_blank"
-              data-cursor="disable"
-              className="contact-social"
-            >
-              Linkedin <MdArrowOutward />
-            </a>
-            <a
-              href="https://x.com"
-              target="_blank"
-              data-cursor="disable"
-              className="contact-social"
-            >
-              Twitter <MdArrowOutward />
-            </a>
-            <a
-              href="https://www.instagram.com"
-              target="_blank"
-              data-cursor="disable"
-              className="contact-social"
-            >
-              Instagram <MdArrowOutward />
-            </a>
-          </div>
-          <div className="contact-box">
-            <h2>
-              Designed and Developed <br /> by <span>Moncy Yohannan</span>
-            </h2>
-            <h5>
-              <MdCopyright /> 2024
-            </h5>
+            <p className="contact-copyright">
+              <MdCopyright /> 2026 · All rights reserved
+            </p>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

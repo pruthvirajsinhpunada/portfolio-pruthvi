@@ -12,22 +12,98 @@ import {
 } from "@react-three/rapier";
 
 const textureLoader = new THREE.TextureLoader();
-const imageUrls = [
-  "/images/react2.webp",
-  "/images/next2.webp",
-  "/images/node2.webp",
-  "/images/express.webp",
-  "/images/mongo.webp",
-  "/images/mysql.webp",
-  "/images/typescript.webp",
-  "/images/javascript.webp",
+
+type LogoSrc = { type: "image"; url: string };
+type LabelSrc = { type: "label"; label: string; color: string };
+type Src = LogoSrc | LabelSrc;
+
+const sources: Src[] = [
+  // Apple / iOS & project tech
+  { type: "image", url: "/images/tech/swift.png" },
+  { type: "image", url: "/images/tech/swiftui.png" },
+  { type: "image", url: "/images/tech/xcode.png" },
+  { type: "image", url: "/images/tech/visionos.png" },
+  { type: "image", url: "/images/tech/realitykit.png" },
+  { type: "image", url: "/images/tech/coreml.png" },
+  { type: "image", url: "/images/tech/react.png" },
+  { type: "image", url: "/images/typescript.webp" },
+  // Text-label balls — brand-colored sans text on white sphere
+  { type: "label", label: "Firebase", color: "#FFA000" },
+  { type: "label", label: "Combine", color: "#0066CC" },
+  { type: "label", label: "MapKit", color: "#34C759" },
+  { type: "label", label: "AVFoundation", color: "#FF375F" },
+  { type: "label", label: "ARKit", color: "#007AFF" },
+  { type: "label", label: "Reality\nComposer", color: "#AF52DE" },
+  { type: "label", label: "SpriteKit", color: "#00BCD4" },
+  { type: "label", label: "Vision", color: "#FF9500" },
+  { type: "label", label: "Create ML", color: "#30B0C7" },
+  { type: "label", label: "Natural\nLanguage", color: "#FF6482" },
+  { type: "label", label: "Game\nCenter", color: "#5856D6" },
+  { type: "label", label: "Blender", color: "#E87D0D" },
+  { type: "label", label: "USDZ", color: "#8E8E93" },
+  { type: "label", label: "Python", color: "#3776AB" },
+  { type: "label", label: "PyTorch", color: "#EE4C2C" },
+  // Portfolio site tech
+  { type: "label", label: "Vite", color: "#646CFF" },
+  { type: "label", label: "Three.js", color: "#049EF4" },
+  { type: "label", label: "R3F", color: "#1EC8E8" },
+  { type: "label", label: "Rapier", color: "#B72025" },
+  { type: "label", label: "GSAP", color: "#88CE02" },
 ];
-const textures = imageUrls.map((url) => textureLoader.load(url));
+
+const TEX_SIZE = 512;
+
+function makeLabelTexture(text: string, color: string): THREE.Texture {
+  const canvas = document.createElement("canvas");
+  canvas.width = TEX_SIZE;
+  canvas.height = TEX_SIZE;
+  const ctx = canvas.getContext("2d")!;
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, TEX_SIZE, TEX_SIZE);
+
+  const lines = text.split("\n");
+  const baseSize = lines.length > 1 ? 88 : 110;
+  ctx.fillStyle = color;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.font = `700 ${baseSize}px "Geist", "Inter", system-ui, sans-serif`;
+
+  const longest = Math.max(...lines.map((l) => ctx.measureText(l).width));
+  const maxWidth = TEX_SIZE * 0.82;
+  let fontSize = baseSize;
+  if (longest > maxWidth) {
+    fontSize = Math.floor((baseSize * maxWidth) / longest);
+    ctx.font = `700 ${fontSize}px "Geist", "Inter", system-ui, sans-serif`;
+  }
+
+  const lineHeight = fontSize * 1.08;
+  const totalHeight = lineHeight * lines.length;
+  const startY = TEX_SIZE / 2 - totalHeight / 2 + lineHeight / 2;
+  lines.forEach((line, i) => {
+    ctx.fillText(line, TEX_SIZE / 2, startY + i * lineHeight);
+  });
+
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = 8;
+  return tex;
+}
+
+const textures: THREE.Texture[] = sources.map((s) => {
+  if (s.type === "image") {
+    const t = textureLoader.load(s.url);
+    t.colorSpace = THREE.SRGBColorSpace;
+    return t;
+  }
+  return makeLabelTexture(s.label, s.color);
+});
 
 const sphereGeometry = new THREE.SphereGeometry(1, 28, 28);
 
-const spheres = [...Array(30)].map(() => ({
-  scale: [0.7, 1, 0.8, 1, 1][Math.floor(Math.random() * 5)],
+const SPHERE_COUNT = 42;
+const spheres = [...Array(SPHERE_COUNT)].map((_, i) => ({
+  scale: [0.7, 1, 0.8, 1, 1][i % 5],
+  textureIndex: i % textures.length,
 }));
 
 type SphereProps = {
@@ -126,13 +202,27 @@ function Pointer({ vec = new THREE.Vector3(), isActive }: PointerProps) {
 
 const TechStack = () => {
   const [isActive, setIsActive] = useState(false);
+  const [frameloop, setFrameloop] = useState<"always" | "never">("never");
+  const wrapRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!wrapRef.current) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        setFrameloop(entry.isIntersecting ? "always" : "never");
+      },
+      { threshold: 0 }
+    );
+    io.observe(wrapRef.current);
+    return () => io.disconnect();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY || document.documentElement.scrollTop;
-      const threshold = document
-        .getElementById("work")!
-        .getBoundingClientRect().top;
+      const workEl = document.getElementById("work");
+      if (!workEl) return;
+      const threshold = workEl.getBoundingClientRect().top;
       setIsActive(scrollY > threshold);
     };
     document.querySelectorAll(".header a").forEach((elem) => {
@@ -167,11 +257,21 @@ const TechStack = () => {
   }, []);
 
   return (
-    <div className="techstack">
-      <h2> My Techstack</h2>
+    <div className="techstack" ref={wrapRef}>
+      <header className="techstack-header">
+        <span className="techstack-kicker">// toolkit</span>
+        <h2 className="techstack-title">
+          My <span className="techstack-title-accent">Techstack</span>
+        </h2>
+        <p className="techstack-lede">
+          Everything I reach for — from Apple platforms to the stack powering
+          this site. Drag the balls around.
+        </p>
+      </header>
 
       <Canvas
         shadows
+        frameloop={frameloop}
         gl={{ alpha: true, stencil: false, depth: false, antialias: false }}
         camera={{ position: [0, 0, 20], fov: 32.5, near: 1, far: 100 }}
         onCreated={(state) => (state.gl.toneMappingExposure = 1.5)}
@@ -192,14 +292,14 @@ const TechStack = () => {
           {spheres.map((props, i) => (
             <SphereGeo
               key={i}
-              {...props}
-              material={materials[Math.floor(Math.random() * materials.length)]}
+              scale={props.scale}
+              material={materials[props.textureIndex]}
               isActive={isActive}
             />
           ))}
         </Physics>
         <Environment
-          files="/models/char_enviorment.hdr"
+          preset="city"
           environmentIntensity={0.5}
           environmentRotation={[0, 4, 2]}
         />

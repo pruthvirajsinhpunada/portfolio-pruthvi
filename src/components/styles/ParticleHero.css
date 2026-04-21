@@ -1,0 +1,223 @@
+.particle-hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+  color: #0f1e2e;
+  background: #efe7db;
+}
+
+.particle-hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(1200px 600px at 80% 20%, #ffd9b8 0%, transparent 55%),
+    radial-gradient(900px 700px at 15% 90%, #d8d1f5 0%, transparent 55%),
+    linear-gradient(180deg, #f3ebde 0%, #e7dfd1 100%);
+  z-index: -3;
+}
+
+.particle-hero-grain {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(15, 30, 46, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 30, 46, 0.05) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 40%, transparent 90%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 40%, transparent 90%);
+  z-index: -2;
+  pointer-events: none;
+}
+
+.particle-hero-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  z-index: -1;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+
+.particle-hero-blob.blob-a {
+  width: 520px;
+  height: 520px;
+  background: #ff6b35;
+  opacity: 0.28;
+  top: -180px;
+  right: -150px;
+}
+
+.particle-hero-blob.blob-b {
+  width: 460px;
+  height: 460px;
+  background: #5b4ac9;
+  opacity: 0.22;
+  bottom: -160px;
+  left: -120px;
+}
+
+.particle-canvas-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.particle-canvas-wrap canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.particle-hero-label-left,
+.particle-hero-label-right,
+.particle-hero-scrollhint {
+  position: absolute;
+  font-family: "Geist", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: rgba(15, 30, 46, 0.7);
+  z-index: 4;
+}
+
+.particle-hero-label-left {
+  top: 50%;
+  left: 32px;
+  transform: translateY(-50%) rotate(-90deg);
+  transform-origin: left center;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.label-dot {
+  width: 7px;
+  height: 7px;
+  background: #ff6b35;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #ff6b35;
+  animation: pulse 1.8s ease-in-out infinite;
+}
+
+.particle-hero-label-right {
+  top: 50%;
+  right: 32px;
+  transform: translateY(-50%) rotate(90deg);
+  transform-origin: right center;
+  white-space: nowrap;
+}
+
+.particle-hero-scrollhint {
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0.75;
+}
+
+.scroll-arrow {
+  display: inline-block;
+  font-size: 14px;
+  animation: arrow-bounce 1.8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.4); }
+}
+
+@keyframes arrow-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+
+.orbit-icons {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  z-index: 1;
+}
+
+.orbit-icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 88px;
+  height: 88px;
+  margin-left: -44px;
+  margin-top: -44px;
+  transition: transform 0.08s linear, filter 0.3s ease, opacity 0.3s ease;
+  will-change: transform, filter;
+}
+
+.orbit-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+@media screen and (max-width: 900px) {
+  .orbit-icon {
+    width: 56px;
+    height: 56px;
+    margin-left: -28px;
+    margin-top: -28px;
+  }
+}
+
+.particle-hero .landing-circle1,
+.particle-hero .landing-circle2 {
+  display: none !important;
+}
+
+body.hero-in-view .landing-circle1,
+body.hero-in-view .landing-circle2 {
+  display: none !important;
+}
+
+body.hero-in-view .header ul li {
+  color: #0f1e2e !important;
+}
+
+body.hero-in-view .navbar-title {
+  color: #0f1e2e !important;
+}
+
+body.hero-in-view .navbar-connect {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media screen and (max-width: 900px) {
+  .particle-hero-label-left,
+  .particle-hero-label-right {
+    display: none;
+  }
+  .particle-hero-blob.blob-a,
+  .particle-hero-blob.blob-b {
+    width: 300px;
+    height: 300px;
+    filter: blur(70px);
+  }
+  .orbit-chip {
+    padding: 6px 10px;
+    font-size: 11px;
+    margin-left: -42px;
+  }
+}

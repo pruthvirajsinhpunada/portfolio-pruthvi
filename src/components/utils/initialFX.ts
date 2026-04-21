@@ -1,4 +1,4 @@
-import { SplitText } from "gsap-trial/SplitText";
+import SplitType from "split-type";
 import gsap from "gsap";
 import { smoother } from "../Navbar";
 
@@ -12,15 +12,15 @@ export function initialFX() {
     delay: 1,
   });
 
-  var landingText = new SplitText(
-    [".landing-info h3", ".landing-intro h2", ".landing-intro h1"],
-    {
-      type: "chars,lines",
-      linesClass: "split-line",
-    }
+  const landingTargets = document.querySelectorAll<HTMLElement>(
+    ".landing-info h3, .landing-intro h2, .landing-intro h1"
   );
+  const landingText = new SplitType(Array.from(landingTargets), {
+    types: "lines,chars",
+    lineClass: "split-line",
+  });
   gsap.fromTo(
-    landingText.chars,
+    landingText.chars ?? [],
     { opacity: 0, y: 80, filter: "blur(5px)" },
     {
       opacity: 1,
@@ -33,11 +33,11 @@ export function initialFX() {
     }
   );
 
-  let TextProps = { type: "chars,lines", linesClass: "split-h2" };
+  const TextProps = { types: "lines,chars" as const, lineClass: "split-h2" };
 
-  var landingText2 = new SplitText(".landing-h2-info", TextProps);
+  const landingText2 = new SplitType(".landing-h2-info", TextProps);
   gsap.fromTo(
-    landingText2.chars,
+    landingText2.chars ?? [],
     { opacity: 0, y: 80, filter: "blur(5px)" },
     {
       opacity: 1,
@@ -72,21 +72,23 @@ export function initialFX() {
     }
   );
 
-  var landingText3 = new SplitText(".landing-h2-info-1", TextProps);
-  var landingText4 = new SplitText(".landing-h2-1", TextProps);
-  var landingText5 = new SplitText(".landing-h2-2", TextProps);
+  const landingText3 = new SplitType(".landing-h2-info-1", TextProps);
+  const landingText4 = new SplitType(".landing-h2-1", TextProps);
+  const landingText5 = new SplitType(".landing-h2-2", TextProps);
 
   LoopText(landingText2, landingText3);
   LoopText(landingText4, landingText5);
 }
 
-function LoopText(Text1: SplitText, Text2: SplitText) {
-  var tl = gsap.timeline({ repeat: -1, repeatDelay: 1 });
+function LoopText(Text1: SplitType, Text2: SplitType) {
+  const tl = gsap.timeline({ repeat: -1, repeatDelay: 1 });
   const delay = 4;
   const delay2 = delay * 2 + 1;
+  const chars1 = Text1.chars ?? [];
+  const chars2 = Text2.chars ?? [];
 
   tl.fromTo(
-    Text2.chars,
+    chars2,
     { opacity: 0, y: 80 },
     {
       opacity: 1,
@@ -99,7 +101,7 @@ function LoopText(Text1: SplitText, Text2: SplitText) {
     0
   )
     .fromTo(
-      Text1.chars,
+      chars1,
       { y: 80 },
       {
         duration: 1.2,
@@ -111,7 +113,7 @@ function LoopText(Text1: SplitText, Text2: SplitText) {
       1
     )
     .fromTo(
-      Text1.chars,
+      chars1,
       { y: 0 },
       {
         y: -80,
@@ -123,7 +125,7 @@ function LoopText(Text1: SplitText, Text2: SplitText) {
       0
     )
     .to(
-      Text2.chars,
+      chars2,
       {
         y: -80,
         duration: 1.2,

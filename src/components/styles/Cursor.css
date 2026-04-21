@@ -8,11 +8,18 @@
   border-radius: 50px;
   pointer-events: none;
   z-index: 99;
-  background-color: #e6c3ff;
-  box-shadow: 0px 0px 30px 0px rgb(175, 131, 255);
-  mix-blend-mode: difference;
+  background-color: rgba(15, 30, 46, 0.12);
+  border: 1.5px solid rgba(15, 30, 46, 0.55);
+  box-shadow: 0 0 18px rgba(255, 107, 53, 0.18);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
   transition: top 0.3s ease-out, left 0.3s ease-out, width 0.3s ease-out,
-    height 0.3s ease-out;
+    height 0.3s ease-out, background-color 0.3s ease, border-color 0.3s ease;
+}
+body.hero-theme-dark .cursor-main {
+  background-color: rgba(230, 195, 255, 0.2);
+  border-color: rgba(230, 195, 255, 0.8);
+  box-shadow: 0 0 30px rgba(175, 131, 255, 0.45);
 }
 .cursor-icons {
   top: 10px;

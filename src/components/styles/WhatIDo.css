@@ -1,393 +1,291 @@
-.whatIDO {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  place-items: center;
+.wid-section {
   position: relative;
-  opacity: 1;
-  height: 100vh;
   width: var(--cWidth);
-  max-width: 1920px;
+  max-width: 1600px;
   margin: auto;
+  padding: 140px 0 120px;
   z-index: 9;
 }
-.what-box {
-  width: 50%;
+
+.wid-head {
   display: flex;
-  justify-content: center;
-  position: relative;
-  z-index: 9;
-}
-.what-box h2 {
-  font-size: calc(4vw + 25px);
-  line-height: calc(4vw + 20px);
-  font-weight: 600;
-  margin-right: 10%;
-  margin-bottom: 100px;
-}
-
-.hat-h2 {
-  font-style: italic;
-}
-.do-h2 {
-  color: var(--accentColor);
-}
-.what-box-in {
   flex-direction: column;
-  height: 500px;
-  margin-left: 200px;
-  position: relative;
-  display: none;
-}
-.what-content {
-  width: 450px;
-  height: 33%;
-  min-height: 50%;
-  transition: 0.5s;
-  /* border: 0.5px dashed rgba(255, 255, 255, 0.3); */
-  position: relative;
-  padding: 50px;
-  box-sizing: border-box;
+  gap: 18px;
+  max-width: 780px;
+  margin-bottom: 70px;
 }
 
-.what-noTouch:hover,
-.what-content-active {
-  min-height: 67%;
-  padding: 40px 50px;
+.wid-kicker {
+  font-family: "Geist Mono", "JetBrains Mono", monospace;
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: var(--accentColor);
+  opacity: 0.9;
+  text-transform: lowercase;
 }
 
-.what-noTouch:hover ~ .what-content,
-.what-box-in:hover .what-noTouch:not(:hover),
-.what-content.what-sibling {
-  min-height: 33%;
-  padding: 10px 50px;
+.wid-title {
+  font-size: clamp(56px, 7vw, 120px);
+  line-height: 0.95;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: -0.02em;
 }
-.what-content h3 {
-  font-size: 35px;
-  letter-spacing: 1px;
+
+.wid-title-accent {
+  color: var(--accentColor);
+  font-style: italic;
+  font-weight: 500;
+}
+
+.wid-lede {
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: 300;
+  opacity: 0.55;
+  max-width: 560px;
   margin: 0;
 }
-.what-content p {
-  font-size: 14px;
-  line-height: 18px;
-  font-weight: 200;
-  letter-spacing: 0.7px;
+
+.wid-lede-hint {
+  color: var(--accentColor);
+  opacity: 0.9;
+  font-style: italic;
 }
-.what-content h4 {
-  font-weight: 300;
-  letter-spacing: 1px;
-  margin: 0px;
-  font-size: 14px;
+
+.wid-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  perspective: 1600px;
+}
+
+/* --- flip container --- */
+.wid-card {
+  position: relative;
+  min-height: 520px;
+  cursor: pointer;
+  transform-style: preserve-3d;
+}
+
+.wid-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  transition: transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.wid-card:hover .wid-card-inner,
+.wid-card.is-flipped .wid-card-inner {
+  transform: rotateY(180deg);
+}
+
+/* --- shared face styles --- */
+.wid-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 36px 32px 32px;
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045) 0%, rgba(255, 255, 255, 0.015) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.wid-face-front {
+  transform: rotateY(0deg);
+}
+
+.wid-face-back {
+  transform: rotateY(180deg);
+  background:
+    radial-gradient(120% 80% at 0% 0%, rgba(255, 120, 60, 0.1) 0%, transparent 55%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.wid-card-rail {
+  position: absolute;
+  top: 36px;
+  bottom: 36px;
+  left: 0;
+  width: 2px;
+  background: linear-gradient(180deg, transparent, var(--accentColor) 30%, var(--accentColor) 70%, transparent);
   opacity: 0.3;
 }
-.what-content-in {
-  opacity: 0;
-  animation: whatFlicker 0.5s 1 forwards;
-  animation-delay: 1s;
-}
-@keyframes whatFlicker {
-  0%,
-  25%,
-  35%,
-  60% {
-    opacity: 0;
-  }
 
-  30%,
-  50%,
-  40%,
-  100% {
-    opacity: 1;
-  }
+.wid-card-rail-back {
+  opacity: 0.85;
+  width: 3px;
 }
-.what-content::before,
-.what-corner::before,
-.what-content::after,
-.what-corner::after {
-  content: "";
-  width: 10px;
-  height: 10px;
-  position: absolute;
-  border: 4px solid #fff;
-  opacity: 0;
-  animation: whatCorners 0.2s 1 forwards;
-  animation-delay: 0.5s;
-}
-@keyframes whatCorners {
-  100% {
-    opacity: 1;
-  }
-}
-.what-content::before {
-  top: -2px;
-  left: -2px;
-  border-right: none;
-  border-bottom: none;
-}
-.what-corner::before {
-  top: -2px;
-  right: -2px;
-  border-left: none;
-  border-bottom: none;
-}
-.what-content::after {
-  bottom: -2px;
-  left: -2px;
-  border-top: none;
-  border-right: none;
-}
-.what-corner::after {
-  bottom: -2px;
-  right: -2px;
-  border-left: none;
-  border-top: none;
-}
-.what-arrow {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  width: 25px;
-  height: 25px;
-  border: 1px solid #fff;
-}
-.what-arrow::before {
-  content: "";
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(-45deg);
-  border-left: 1px solid #fff;
-  border-bottom: 1px solid #fff;
-  transition: 0.5s;
-  width: 10px;
-  height: 10px;
-}
-.what-noTouch:hover .what-arrow::before,
-.what-content-active .what-arrow::before {
-  transform: translate(-50%, -20%) rotate(-225deg);
-}
-.what-border1 {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  height: 100%;
-  transition: 0.5s;
-  max-width: 0%;
-  overflow: hidden;
-  opacity: 0.8;
-  animation: whatBorders 1.2s 1 forwards;
-}
-.what-border1 svg {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 450px;
-}
-.what-border2 {
-  position: absolute;
-  top: 50%;
-  width: 100%;
-  left: 0;
-  transform: translateY(-50%);
-  height: 100%;
-  max-height: 0%;
-  overflow: hidden;
-  transition: 0.5s;
-  opacity: 0.8;
-  animation: whatBorders 1.2s 1 forwards;
-}
-.what-border2 svg {
-  height: 500px;
-  top: 50%;
-  transform: translateY(-50%);
-  position: absolute;
-}
-.what-content-in {
-  height: 100%;
-  overflow: hidden;
-}
-.what-content-in h5 {
-  font-weight: 300;
-  opacity: 0.5;
-  font-size: 12px;
-  letter-spacing: 1px;
-  font-family: "Geist", sans-serif;
-  margin-bottom: 5px;
-}
-@keyframes whatBorders {
-  80% {
-    opacity: 0.8;
-  }
-  100% {
-    max-height: 100%;
-    max-width: 100%;
-    opacity: 0.2;
-  }
-}
-.what-content-flex {
+
+/* --- front face --- */
+.wid-card-head {
   display: flex;
-  gap: 5px;
-  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 30px;
 }
-.what-tags {
+
+.wid-num {
+  font-family: "Geist Mono", "JetBrains Mono", monospace;
   font-size: 13px;
+  letter-spacing: 2px;
   font-weight: 400;
-  padding: 2px 7px;
-  background-color: rgba(255, 255, 255, 0.15);
-  border: 1px solid #ffffff50;
-  border-radius: 30px;
+  opacity: 0.5;
 }
-@media only screen and (max-width: 1600px) {
-  .what-box h2 {
-    margin-right: 18%;
-  }
-}
-@media only screen and (max-width: 1400px) {
-  .what-box h2 {
-    margin-right: 20%;
-  }
-  .what-box-in {
-    height: 400px;
-  }
-  .what-content h3 {
-    font-size: 28px;
-  }
-  .what-content {
-    padding: 30px;
-    width: 400px;
-  }
-  .what-content p {
-    font-size: 13px;
-  }
-  .what-noTouch:hover,
-  .what-content-active {
-    padding: 20px 30px;
-  }
 
-  .what-noTouch:hover ~ .what-content,
-  .what-box-in:hover .what-noTouch:not(:hover),
-  .what-content.what-sibling {
-    padding: 10px 30px;
-  }
-  .what-tags {
-    font-size: 12px;
-  }
+.wid-glyph {
+  font-size: 30px;
+  line-height: 1;
+  opacity: 0.75;
+  filter: drop-shadow(0 0 14px rgba(255, 120, 60, 0.2));
 }
-@media only screen and (max-width: 1400px) {
-  .what-box-in {
-    margin-left: 50px;
-  }
-  .what-content {
-    width: 380px;
-  }
-}
-@media only screen and (max-width: 1024px) {
-  .whatIDO {
-    height: auto;
-    padding: 50px 0px;
-    padding-bottom: 50px;
-  }
-  .what-box-in {
-    height: 500px;
-    margin-left: -50px;
-  }
-  .what-content {
-    padding: 50px;
-    width: 500px;
-  }
-  .what-content p {
-    font-size: 14px;
-  }
-  .what-noTouch:hover,
-  .what-content-active {
-    min-height: 67%;
-    padding: 50px;
-  }
 
-  .what-noTouch:hover ~ .what-content,
-  .what-box-in:hover .what-noTouch:not(:hover),
-  .what-content.what-sibling {
-    min-height: 33%;
-    padding: 10px 50px;
-  }
+.wid-face-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
-@media only screen and (max-width: 900px) {
-  .whatIDO {
-    flex-direction: column;
-  }
-  .what-box h2 {
-    margin: 50px 0;
-    font-size: 55px;
-    line-height: 53px;
-  }
-  .what-box:first-child {
-    justify-content: left;
-  }
-  .what-box:last-child {
-    height: 500px;
-  }
-  .what-box {
-    width: 500px;
-    max-width: calc(100% - 50px);
-    margin: auto;
-  }
-  .what-content {
-    width: 100%;
-  }
-  .what-box-in {
-    margin-left: 0px;
-    height: 450px;
-  }
-  .what-content h5,
-  .what-content-flex {
-    opacity: 0;
-    transition: 0.3s;
-  }
-  .what-noTouch:hover h5,
-  .what-content-active h5,
-  .what-noTouch:hover .what-content-flex,
-  .what-content-active .what-content-flex {
-    opacity: 1;
-  }
-  .what-content {
-    padding: 30px;
-  }
-  .what-content p {
-    font-size: 11px;
-  }
-  .what-noTouch:hover,
-  .what-content-active {
-    padding: 10px 30px;
-  }
-  .what-tags {
-    font-size: 11px;
-  }
 
-  .what-noTouch:hover ~ .what-content,
-  .what-box-in:hover .what-noTouch:not(:hover),
-  .what-content.what-sibling {
-    padding: 5px 30px;
+.wid-card-title {
+  font-size: 30px;
+  line-height: 1.1;
+  font-weight: 600;
+  margin: 0 0 8px;
+  letter-spacing: -0.01em;
+}
+
+.wid-card-subtitle {
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.45;
+  margin: 0 0 24px;
+}
+
+.wid-tagline {
+  font-size: 17px;
+  line-height: 1.5;
+  font-weight: 400;
+  opacity: 0.82;
+  margin: auto 0 0;
+  letter-spacing: -0.005em;
+}
+
+.wid-face-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.wid-flip-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: "Geist Mono", "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accentColor);
+  opacity: 0.9;
+}
+
+.wid-flip-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  font-size: 12px;
+  transition: transform 0.6s ease;
+}
+
+.wid-card:hover .wid-flip-arrow {
+  transform: rotate(-180deg);
+}
+
+/* --- back face --- */
+.wid-back-label {
+  font-family: "Geist Mono", "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accentColor);
+  opacity: 0.9;
+}
+
+.wid-back-desc {
+  font-size: 14.5px;
+  line-height: 1.65;
+  font-weight: 300;
+  opacity: 0.85;
+  margin: 0 0 22px;
+}
+
+.wid-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.wid-tag {
+  font-size: 11.5px;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+  padding: 4px 10px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.88);
+  transition: border-color 0.3s ease, color 0.3s ease, background 0.3s ease;
+}
+
+.wid-tag:hover {
+  border-color: var(--accentColor);
+  color: #fff;
+  background: rgba(255, 120, 60, 0.1);
+}
+
+@media only screen and (max-width: 1100px) {
+  .wid-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
   }
-  .what-content h3 {
-    font-size: 25px;
+  .wid-card {
+    min-height: 440px;
   }
 }
-@media only screen and (max-width: 550px) {
-  .whatIDO {
-    place-items: inherit;
-    align-items: start;
-    justify-content: left;
+
+@media only screen and (max-width: 640px) {
+  .wid-section {
+    padding: 90px 0 80px;
   }
-  .what-box {
-    max-width: calc(100% - 25px);
-    margin: 0;
+  .wid-head {
+    margin-bottom: 44px;
   }
-}
-@media only screen and (min-width: 1950px) {
-  .what-box h2 {
-    font-size: 7rem;
-    line-height: 6.8rem;
+  .wid-face {
+    padding: 28px 24px 24px;
+  }
+  .wid-card-title {
+    font-size: 26px;
+  }
+  .wid-tagline {
+    font-size: 15px;
   }
 }

@@ -2,26 +2,17 @@ import { useEffect } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import HoverLinks from "./HoverLinks";
 import { gsap } from "gsap";
-import { ScrollSmoother } from "gsap-trial/ScrollSmoother";
+import { createSmoother, SmootherAPI } from "./utils/smoothScroll";
 import "./styles/Navbar.css";
 
-gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
-export let smoother: ScrollSmoother;
+gsap.registerPlugin(ScrollTrigger);
+export let smoother: SmootherAPI;
 
 const Navbar = () => {
   useEffect(() => {
-    smoother = ScrollSmoother.create({
-      wrapper: "#smooth-wrapper",
-      content: "#smooth-content",
-      smooth: 1.7,
-      speed: 1.7,
-      effects: true,
-      autoResize: true,
-      ignoreMobileResize: true,
-    });
+    smoother = createSmoother();
 
     smoother.scrollTop(0);
-    smoother.paused(true);
 
     let links = document.querySelectorAll(".header ul a");
     links.forEach((elem) => {
@@ -29,28 +20,31 @@ const Navbar = () => {
       element.addEventListener("click", (e) => {
         if (window.innerWidth > 1024) {
           e.preventDefault();
-          let elem = e.currentTarget as HTMLAnchorElement;
-          let section = elem.getAttribute("data-href");
-          smoother.scrollTo(section, true, "top top");
+          let el = e.currentTarget as HTMLAnchorElement;
+          let section = el.getAttribute("data-href");
+          if (section) {
+            const target = document.querySelector(section) as HTMLElement | null;
+            if (target) smoother.scrollTo(target, true, "top top");
+          }
         }
       });
     });
     window.addEventListener("resize", () => {
-      ScrollSmoother.refresh(true);
+      smoother.refresh();
     });
   }, []);
   return (
     <>
       <div className="header">
         <a href="/#" className="navbar-title" data-cursor="disable">
-          Logo
+          PP
         </a>
         <a
-          href="mailto:example@mail.com"
+          href="mailto:pruthviraj1022004@gmail.com"
           className="navbar-connect"
           data-cursor="disable"
         >
-          example@mail.com
+          pruthviraj1022004@gmail.com
         </a>
         <ul>
           <li>

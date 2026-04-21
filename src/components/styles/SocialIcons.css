@@ -32,16 +32,21 @@
   display: flex;
 }
 .social-icons a {
-  --siLeft: 50%;
-  --siTop: 50%;
   position: absolute;
-  left: var(--siLeft, 50%);
-  top: var(--siTop, 50%);
-  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  margin-top: -0.5em;
+  margin-left: -0.5em;
   display: flex;
   font-size: 23px;
-  will-change: left, top;
-  transition: transform 0.3s ease-out;
+  color: inherit;
+  text-decoration: none;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+  transition: color 0.25s ease;
+}
+.social-icons a:hover {
+  color: var(--accentColor);
 }
 .resume-button {
   position: absolute;
