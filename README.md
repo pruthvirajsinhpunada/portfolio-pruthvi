@@ -38,6 +38,3 @@ npm run build
 npm run preview
 ```
 
-## Credits
-
-Built on the open-source structure by [Moncy Yohannan](https://github.com/MoncyDev/Portfolio-Website) — redesigned end-to-end for my own content, interactions, and visual identity.
