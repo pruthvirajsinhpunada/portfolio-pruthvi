@@ -209,7 +209,10 @@ export const projects: Project[] = [
     image: "/images/projects/supply-chain-optimization/hero.webp",
     hero: "/images/projects/supply-chain-optimization/hero.webp",
     monolith: "/images/projects/supply-chain-optimization/monolith.webp",
-    gallery: [],
+    gallery: [
+      "/images/projects/supply-chain-optimization/gallery/01.webp",
+      "/images/projects/supply-chain-optimization/gallery/02.webp",
+    ],
     link: "https://github.com/pruthvirajsinhpunada/supply-chain-optimization",
     accent: "#3ad6c5",
     caseStudy: {
