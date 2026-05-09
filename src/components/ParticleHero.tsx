@@ -103,41 +103,43 @@ function ParticleField({ mouse }: { mouse: React.MutableRefObject<THREE.Vector2>
     const pos = positionAttr.array as Float32Array;
     const t = clock.getElapsedTime();
 
-    const mouseWorld = new THREE.Vector3(
-      (mouse.current.x / window.innerWidth) * viewport.width - viewport.width / 2,
-      -(mouse.current.y / window.innerHeight) * viewport.height + viewport.height / 2,
-      0
-    );
+    const mouseWorldX =
+      (mouse.current.x / window.innerWidth) * viewport.width - viewport.width / 2;
+    const mouseWorldY =
+      -(mouse.current.y / window.innerHeight) * viewport.height + viewport.height / 2;
 
     const repelRadius = 1.3;
     const repelRadiusSq = repelRadius * repelRadius;
+    const invRepelRadius = 1 / repelRadius;
     const repelStrength = 0.08;
     const springStrength = 0.03;
     const damping = 0.88;
+    const count = home.count;
+    const homePos = home.positions;
 
-    for (let i = 0; i < home.count; i++) {
+    for (let i = 0; i < count; i++) {
       const i3 = i * 3;
-      const hx = home.positions[i3];
-      const hy = home.positions[i3 + 1];
-      const hz = home.positions[i3 + 2];
+      const hx = homePos[i3];
+      const hy = homePos[i3 + 1];
+      const hz = homePos[i3 + 2];
 
-      let cx = pos[i3];
-      let cy = pos[i3 + 1];
-      let cz = pos[i3 + 2];
+      const cx = pos[i3];
+      const cy = pos[i3 + 1];
+      const cz = pos[i3 + 2];
 
       let vx = velocities[i3];
       let vy = velocities[i3 + 1];
       let vz = velocities[i3 + 2];
 
-      const dx = cx - mouseWorld.x;
-      const dy = cy - mouseWorld.y;
+      const dx = cx - mouseWorldX;
+      const dy = cy - mouseWorldY;
       const distSq = dx * dx + dy * dy;
 
       if (distSq < repelRadiusSq && distSq > 0.0001) {
-        const dist = Math.sqrt(distSq);
-        const force = (1 - dist / repelRadius) * repelStrength;
-        vx += (dx / dist) * force;
-        vy += (dy / dist) * force;
+        const invDist = 1 / Math.sqrt(distSq);
+        const force = (1 - (1 / invDist) * invRepelRadius) * repelStrength;
+        vx += dx * invDist * force;
+        vy += dy * invDist * force;
         vz += (Math.random() - 0.5) * force * 0.8;
       }
 
@@ -145,8 +147,7 @@ function ParticleField({ mouse }: { mouse: React.MutableRefObject<THREE.Vector2>
       vy += (hy - cy) * springStrength;
       vz += (hz - cz) * springStrength;
 
-      const breathe = Math.sin(t * 1.2 + i * 0.05) * 0.0006;
-      vy += breathe;
+      vy += Math.sin(t * 1.2 + i * 0.05) * 0.0006;
 
       vx *= damping;
       vy *= damping;
@@ -191,14 +192,14 @@ function ParticleField({ mouse }: { mouse: React.MutableRefObject<THREE.Vector2>
 
 type IconDef = { src: string; label: string };
 const ICONS: IconDef[] = [
-  { src: "/images/tech/swift.png", label: "Swift" },
-  { src: "/images/tech/swiftui.png", label: "SwiftUI" },
-  { src: "/images/tech/xcode.png", label: "Xcode" },
-  { src: "/images/tech/visionos.png", label: "visionOS" },
-  { src: "/images/tech/realitykit.png", label: "RealityKit" },
-  { src: "/images/tech/coreml.png", label: "Core ML" },
-  { src: "/images/tech/react.png", label: "React" },
-  { src: "/images/tech/sketch.png", label: "Sketch" },
+  { src: "/images/tech/swift.webp", label: "Swift" },
+  { src: "/images/tech/swiftui.webp", label: "SwiftUI" },
+  { src: "/images/tech/xcode.webp", label: "Xcode" },
+  { src: "/images/tech/visionos.webp", label: "visionOS" },
+  { src: "/images/tech/realitykit.webp", label: "RealityKit" },
+  { src: "/images/tech/coreml.webp", label: "Core ML" },
+  { src: "/images/tech/react.webp", label: "React" },
+  { src: "/images/tech/sketch.webp", label: "Sketch" },
 ];
 
 function OrbitIcons({ scrollProgress }: { scrollProgress: number }) {
@@ -251,7 +252,10 @@ const ParticleHero = () => {
     const handleLeave = () => {
       mouse.current.set(-9999, -9999);
     };
-    const handleScroll = () => {
+
+    let scrollTicking = false;
+    const computeScroll = () => {
+      scrollTicking = false;
       const hero = document.getElementById("particle-hero");
       if (!hero) return;
       const rect = hero.getBoundingClientRect();
@@ -261,11 +265,16 @@ const ParticleHero = () => {
       );
       setScrollProgress(progress);
     };
+    const handleScroll = () => {
+      if (scrollTicking) return;
+      scrollTicking = true;
+      requestAnimationFrame(computeScroll);
+    };
 
     window.addEventListener("mousemove", handleMove);
     window.addEventListener("mouseleave", handleLeave);
     window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
+    computeScroll();
 
     const hero = document.getElementById("particle-hero");
     let observer: IntersectionObserver | null = null;

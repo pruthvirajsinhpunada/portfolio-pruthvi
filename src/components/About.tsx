@@ -6,7 +6,7 @@ const About = () => {
       <div className="about-photo">
         <div className="about-photo-frame">
           <img
-            src="/images/profile.jpg"
+            src="/images/profile.webp"
             alt="Pruthvirajsinh Punada"
             loading="lazy"
           />

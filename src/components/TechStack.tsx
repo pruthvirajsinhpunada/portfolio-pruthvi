@@ -19,13 +19,13 @@ type Src = LogoSrc | LabelSrc;
 
 const sources: Src[] = [
   // Apple / iOS & project tech
-  { type: "image", url: "/images/tech/swift.png" },
-  { type: "image", url: "/images/tech/swiftui.png" },
-  { type: "image", url: "/images/tech/xcode.png" },
-  { type: "image", url: "/images/tech/visionos.png" },
-  { type: "image", url: "/images/tech/realitykit.png" },
-  { type: "image", url: "/images/tech/coreml.png" },
-  { type: "image", url: "/images/tech/react.png" },
+  { type: "image", url: "/images/tech/swift.webp" },
+  { type: "image", url: "/images/tech/swiftui.webp" },
+  { type: "image", url: "/images/tech/xcode.webp" },
+  { type: "image", url: "/images/tech/visionos.webp" },
+  { type: "image", url: "/images/tech/realitykit.webp" },
+  { type: "image", url: "/images/tech/coreml.webp" },
+  { type: "image", url: "/images/tech/react.webp" },
   { type: "image", url: "/images/typescript.webp" },
   // Text-label balls — brand-colored sans text on white sphere
   { type: "label", label: "Firebase", color: "#FFA000" },
@@ -218,27 +218,36 @@ const TechStack = () => {
   }, []);
 
   useEffect(() => {
-    const handleScroll = () => {
+    let ticking = false;
+    const compute = () => {
+      ticking = false;
       const scrollY = window.scrollY || document.documentElement.scrollTop;
       const workEl = document.getElementById("work");
       if (!workEl) return;
       const threshold = workEl.getBoundingClientRect().top;
       setIsActive(scrollY > threshold);
     };
-    document.querySelectorAll(".header a").forEach((elem) => {
-      const element = elem as HTMLAnchorElement;
-      element.addEventListener("click", () => {
-        const interval = setInterval(() => {
-          handleScroll();
-        }, 10);
-        setTimeout(() => {
-          clearInterval(interval);
-        }, 1000);
-      });
+    const handleScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(compute);
+    };
+    const navLinks = document.querySelectorAll(".header a");
+    const onNavClick = () => {
+      let frames = 0;
+      const tick = () => {
+        compute();
+        if (++frames < 60) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+    navLinks.forEach((elem) => {
+      elem.addEventListener("click", onNavClick);
     });
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      navLinks.forEach((elem) => elem.removeEventListener("click", onNavClick));
     };
   }, []);
   const materials = useMemo(() => {
