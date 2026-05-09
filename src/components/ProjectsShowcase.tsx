@@ -1,120 +1,93 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { MdArrowOutward, MdClose } from "react-icons/md";
-import { FaGithub, FaAppStoreIos } from "react-icons/fa";
+import { MdArrowOutward } from "react-icons/md";
 import { projects } from "../data/projects";
+import Gallery3D from "./gallery/Gallery3D";
 import "./styles/ProjectsShowcase.css";
+import "./styles/Gallery.css";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-const ProjectsShowcase = () => {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const cardRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const [active, setActive] = useState<number | null>(null);
-  const [originRect, setOriginRect] = useState<DOMRect | null>(null);
-  const [phase, setPhase] = useState<"idle" | "opening" | "open" | "closing">(
-    "idle"
-  );
+const useImmersiveCapable = () => {
+  const [capable, setCapable] = useState(true);
+  useLayoutEffect(() => {
+    const check = () => {
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const narrow = window.innerWidth < 880;
+      setCapable(!reduce && !narrow);
+    };
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+  return capable;
+};
 
+const ProjectsShowcase = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const progressRef = useRef(0);
+  const navigate = useNavigate();
+  const immersive = useImmersiveCapable();
+
+  // Scroll-pin the gallery for the duration of the dolly
   useGSAP(
     () => {
-      const cards = gsap.utils.toArray<HTMLElement>(".pw-card");
-      if (!cards.length) return;
-      gsap.from(cards, {
-        y: 40,
+      if (!immersive) return;
+      const stage = stageRef.current;
+      const track = trackRef.current;
+      if (!stage || !track) return;
+
+      const trigger = ScrollTrigger.create({
+        trigger: track,
+        start: "top top",
+        end: "bottom bottom",
+        scrub: true,
+        pin: stage,
+        pinSpacing: false,
+        onUpdate: (self) => {
+          progressRef.current = self.progress;
+        },
+      });
+
+      return () => {
+        trigger.kill();
+      };
+    },
+    { dependencies: [immersive] }
+  );
+
+  // Animate header on first reveal
+  useGSAP(
+    () => {
+      gsap.from(".pw-header > *", {
+        y: 32,
         opacity: 0,
-        scale: 0.95,
-        stagger: 0.06,
-        duration: 0.8,
+        stagger: 0.1,
+        duration: 0.9,
         ease: "power3.out",
+        scrollTrigger: { trigger: ".pw-header", start: "top 85%" },
       });
     },
     { scope: sectionRef }
   );
 
-  const openAt = (i: number) => {
-    const el = cardRefs.current[i];
-    if (!el) return;
-    setOriginRect(el.getBoundingClientRect());
-    setActive(i);
-    setPhase("opening");
-    document.body.style.overflow = "hidden";
-  };
-
-  const close = () => {
-    if (phase !== "open") return;
-    setPhase("closing");
-    const el = cardRefs.current[active ?? 0];
-    if (el) setOriginRect(el.getBoundingClientRect());
-  };
-
-  useLayoutEffect(() => {
-    if (phase === "opening") {
-      const id = requestAnimationFrame(() =>
-        requestAnimationFrame(() => setPhase("open"))
-      );
-      return () => cancelAnimationFrame(id);
-    }
-  }, [phase]);
-
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") close();
+    return () => {
+      progressRef.current = 0;
     };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  });
+  }, []);
 
-  const current = active !== null ? projects[active] : null;
-
-  const getOverlayStyle = (): React.CSSProperties => {
-    if (phase === "opening" && originRect) {
-      return {
-        top: originRect.top,
-        left: originRect.left,
-        width: originRect.width,
-        height: originRect.height,
-        borderRadius: 22,
-        opacity: 1,
-      };
-    }
-    if (phase === "open") {
-      return {
-        top: "50%",
-        left: "50%",
-        width: "min(1180px, 92vw)",
-        height: "min(720px, 86vh)",
-        transform: "translate(-50%, -50%)",
-        borderRadius: 24,
-        opacity: 1,
-      };
-    }
-    if (phase === "closing" && originRect) {
-      return {
-        top: originRect.top,
-        left: originRect.left,
-        width: originRect.width,
-        height: originRect.height,
-        borderRadius: 22,
-        opacity: 0,
-      };
-    }
-    return {};
+  const onSelect = (slug: string) => {
+    navigate(`/projects/${slug}`);
   };
 
-  const onOverlayTransitionEnd = (
-    e: React.TransitionEvent<HTMLDivElement>
-  ) => {
-    if (e.propertyName !== "width") return;
-    if (phase === "closing") {
-      setActive(null);
-      setPhase("idle");
-      setOriginRect(null);
-      document.body.style.overflow = "";
-    }
-  };
+  // Track height drives the scroll distance for the pin (one viewport per ~1.4 monoliths)
+  const trackHeight = `${Math.max(180, projects.length * 70)}vh`;
 
   return (
     <section className="pw-section" id="work" ref={sectionRef}>
@@ -122,117 +95,70 @@ const ProjectsShowcase = () => {
         <header className="pw-header">
           <span className="pw-kicker">// selected work</span>
           <h2 className="pw-title">
-            My <span className="pw-title-accent">Work</span>
+            Walk the <span className="pw-title-accent">gallery</span>.
           </h2>
           <p className="pw-lede">
-            Seven shipped projects across iOS, visionOS, and data.{" "}
-            <span className="pw-hint">Tap a tile to expand.</span>
+            {immersive ? (
+              <>
+                Eight projects, each in their own light.{" "}
+                <span className="pw-hint">Scroll to dolly through · Click any monolith to enter.</span>
+              </>
+            ) : (
+              <>
+                Eight projects, each in their own light.{" "}
+                <span className="pw-hint">Tap a tile to open the case study.</span>
+              </>
+            )}
           </p>
         </header>
-
-        <div className="pw-grid">
-          {projects.map((p, i) => {
-            const isSource = active === i && phase !== "idle";
-            return (
-              <button
-                key={p.title}
-                ref={(el) => (cardRefs.current[i] = el)}
-                className={`pw-card ${isSource ? "is-source" : ""}`}
-                onClick={() => openAt(i)}
-                data-cursor="disable"
-                style={{ "--i": i } as React.CSSProperties}
-              >
-                <div className="pw-card-media">
-                  <img src={p.image} alt={p.title} loading="lazy" />
-                  <div className="pw-card-veil" />
-                </div>
-                <div className="pw-card-head">
-                  <span className="pw-card-num">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <span className="pw-card-arrow" aria-hidden>
-                    <MdArrowOutward />
-                  </span>
-                </div>
-                <div className="pw-card-foot">
-                  <h3 className="pw-card-title">{p.title}</h3>
-                  <p className="pw-card-cat">{p.category}</p>
-                </div>
-              </button>
-            );
-          })}
-        </div>
       </div>
 
-      {current && (
+      {immersive ? (
         <div
-          className={`pw-backdrop ${phase === "open" ? "is-open" : ""} ${
-            phase === "closing" ? "is-closing" : ""
-          }`}
-          onClick={close}
+          ref={trackRef}
+          className="gx-track"
+          style={{ height: trackHeight }}
         >
-          <div
-            className={`pw-detail phase-${phase}`}
-            style={getOverlayStyle()}
-            onTransitionEnd={onOverlayTransitionEnd}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              className="pw-close"
-              onClick={close}
-              aria-label="Close"
-              data-cursor="disable"
-            >
-              <MdClose />
-            </button>
-
-            <div className="pw-detail-media">
-              <img src={current.image} alt={current.title} />
+          <div ref={stageRef} className="gx-stage">
+            <Gallery3D
+              projects={projects}
+              progressRef={progressRef}
+              onSelect={onSelect}
+            />
+            <div className="gx-edge gx-edge-left" />
+            <div className="gx-edge gx-edge-right" />
+            <div className="gx-hint">
+              <span>scroll</span>
+              <span className="gx-hint-bar" />
             </div>
-
-            <div className="pw-detail-body">
-              <span className="pw-detail-num">
-                {String((active ?? 0) + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}
-              </span>
-              <h3 className="pw-detail-title">{current.title}</h3>
-              <p className="pw-detail-cat">{current.category}</p>
-              <p className="pw-detail-desc">{current.description}</p>
-
-              <div className="pw-detail-stack">
-                <span className="pw-stack-label">Stack</span>
-                <div className="pw-stack-pills">
-                  {current.tools.split(",").map((t) => (
-                    <span key={t} className="pw-pill">
-                      {t.trim()}
-                    </span>
-                  ))}
+          </div>
+        </div>
+      ) : (
+        <div className="gx-fallback">
+          <div className="gx-fallback-strip">
+            {projects.map((p, i) => (
+              <button
+                key={p.slug}
+                className="gx-fallback-card"
+                style={{ ["--accent" as string]: p.accent } as React.CSSProperties}
+                onClick={() => onSelect(p.slug)}
+                data-cursor="disable"
+              >
+                <div className="gx-fallback-media">
+                  <img src={p.monolith || p.image} alt={p.title} loading="lazy" />
                 </div>
-              </div>
-
-              <div className="pw-detail-actions">
-                <a
-                  href={current.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="pw-btn"
-                  data-cursor="disable"
-                >
-                  <FaGithub /> GitHub <MdArrowOutward className="pw-btn-arrow" />
-                </a>
-                {current.appStoreLink && (
-                  <a
-                    href={current.appStoreLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="pw-btn pw-btn-primary"
-                    data-cursor="disable"
-                  >
-                    <FaAppStoreIos /> App Store{" "}
-                    <MdArrowOutward className="pw-btn-arrow" />
-                  </a>
-                )}
-              </div>
-            </div>
+                <div className="gx-fallback-body">
+                  <span className="gx-fallback-num">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="gx-fallback-arrow">
+                    <MdArrowOutward />
+                  </span>
+                  <h3 className="gx-fallback-title">{p.title}</h3>
+                  <p className="gx-fallback-cat">{p.category}</p>
+                </div>
+              </button>
+            ))}
           </div>
         </div>
       )}
