@@ -204,23 +204,31 @@ const CaseStudy = () => {
         <section className="cs-section cs-live cs-reveal">
           <span className="cs-block-label">The live experience</span>
           <p className="cs-live-caption">
-            Live site embedded below. If your browser blocks the frame,{" "}
+            Real customers, real reservations.{" "}
             <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
-              open in a new tab
+              Open the live site →
             </a>
-            .
           </p>
-          <div className="cs-laptop">
+          <a
+            href={project.liveUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="cs-laptop"
+            data-cursor="disable"
+            aria-label="Visit pizzartcaserta.it"
+          >
             <div className="cs-laptop-bezel">
-              <iframe
-                title="Pizzart Caserta — live site"
-                src={project.liveUrl}
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              />
+              <div className="cs-laptop-screen">
+                <img src={project.gallery[0] || project.hero} alt="" />
+                <div className="cs-laptop-overlay">
+                  <span className="cs-laptop-cta">
+                    Visit pizzartcaserta.it <MdArrowOutward />
+                  </span>
+                </div>
+              </div>
             </div>
             <div className="cs-laptop-base" />
-          </div>
+          </a>
         </section>
       )}
 
