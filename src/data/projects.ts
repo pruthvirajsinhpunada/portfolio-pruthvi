@@ -28,6 +28,34 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    slug: "livechess",
+    title: "LiveChess",
+    category: "visionOS · Spatial Chess",
+    year: "2026",
+    role: "iOS / visionOS dev · Team",
+    status: "in-development",
+    tools: "Swift, SwiftUI, visionOS, RealityKit, C++ (Stockfish), Lichess API",
+    summary: "Spatial chess for Apple Vision Pro — AI + live online play.",
+    description:
+      "A chess game for Apple Vision Pro: play a Stockfish AI or real opponents online via Lichess, on an immersive RealityKit board with full game review and puzzles. Built as a team project — I integrated the Stockfish C++ engine into Swift and helped build the live multiplayer layer; my work is merged into the main repo.",
+    image: "/images/projects/livechess/hero.webp",
+    hero: "/images/projects/livechess/hero.webp",
+    monolith: "/images/projects/livechess/monolith.webp",
+    gallery: [],
+    link: "https://github.com/pruthvirajsinhpunada/LiveChess",
+    accent: "#caa45d",
+    caseStudy: {
+      problem:
+        "Chess on Vision Pro could be a flat board floating in space — or a genuinely spatial experience with a real engine and real opponents. The hard parts: running a strong AI on-device and wiring live online play that still feels responsive inside a headset.",
+      approach:
+        "Integrated the Stockfish C++ engine into Swift for an adjustable-strength AI, move analysis, and an opening book. Built the online layer on the Lichess API — OAuth (PKCE) auth, live game and event streaming over NDJSON, lobby and matchmaking. Rendered the board as an immersive RealityKit scene with custom USDZ pieces, game review, and puzzle modes.",
+      outcome:
+        "A working spatial chess app: AI opponent, live online multiplayer, post-game review, and puzzles. Built collaboratively, with my contributions merged into the main repository. App Store release planned.",
+      techNotes:
+        "Swift to C++ interop for Stockfish; NDJSON stream parsing for live games; RealityKit immersive space; Blender to USDZ piece pipeline.",
+    },
+  },
+  {
     slug: "pizzart-caserta",
     title: "Pizz'Art Caserta",
     category: "Web · Restaurant Brand",

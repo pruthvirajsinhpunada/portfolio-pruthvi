@@ -100,12 +100,12 @@ const ProjectsShowcase = () => {
           <p className="pw-lede">
             {immersive ? (
               <>
-                Eight projects, each in their own light.{" "}
+                Nine projects, each in their own light.{" "}
                 <span className="pw-hint">Scroll to dolly through · Click any monolith to enter.</span>
               </>
             ) : (
               <>
-                Eight projects, each in their own light.{" "}
+                Nine projects, each in their own light.{" "}
                 <span className="pw-hint">Tap a tile to open the case study.</span>
               </>
             )}
