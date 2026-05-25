@@ -17,6 +17,7 @@ type Props = {
   projects: Project[];
   progressRef: React.MutableRefObject<number>;
   onSelect: (slug: string) => void;
+  frameloop?: "always" | "never";
 };
 
 const CameraDolly = ({
@@ -54,8 +55,8 @@ const Floor = () => (
   <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
     <planeGeometry args={[200, 60]} />
     <MeshReflectorMaterial
-      blur={[300, 100]}
-      resolution={512}
+      blur={[200, 60]}
+      resolution={256}
       mixBlur={1}
       mixStrength={1.2}
       roughness={0.85}
@@ -84,13 +85,14 @@ const Backdrop = () => (
   </>
 );
 
-const Gallery3D = ({ projects, progressRef, onSelect }: Props) => {
+const Gallery3D = ({ projects, progressRef, onSelect, frameloop = "always" }: Props) => {
   const cameraX = useRef(0);
 
   return (
     <Canvas
       shadows
-      dpr={[1, 1.6]}
+      dpr={[1, 1.5]}
+      frameloop={frameloop}
       gl={{ antialias: true, powerPreference: "high-performance" }}
       camera={{ position: [-DOLLY_PRE, CAMERA_Y, CAMERA_Z], fov: 42, near: 0.1, far: 80 }}
     >

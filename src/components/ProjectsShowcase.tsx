@@ -33,6 +33,8 @@ const ProjectsShowcase = () => {
   const progressRef = useRef(0);
   const navigate = useNavigate();
   const immersive = useImmersiveCapable();
+  // Only render the 3D gallery (shadows + reflections) while it's on screen
+  const [galleryActive, setGalleryActive] = useState(false);
 
   // Scroll-pin the gallery for the duration of the dolly
   useGSAP(
@@ -82,6 +84,19 @@ const ProjectsShowcase = () => {
     };
   }, []);
 
+  // Gate the gallery render loop on visibility of its scroll track
+  useEffect(() => {
+    if (!immersive) return;
+    const el = trackRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => setGalleryActive(entry.isIntersecting),
+      { threshold: 0, rootMargin: "200px 0px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [immersive]);
+
   const onSelect = (slug: string) => {
     navigate(`/projects/${slug}`);
   };
@@ -124,6 +139,7 @@ const ProjectsShowcase = () => {
               projects={projects}
               progressRef={progressRef}
               onSelect={onSelect}
+              frameloop={galleryActive ? "always" : "never"}
             />
             <div className="gx-edge gx-edge-left" />
             <div className="gx-edge gx-edge-right" />

@@ -54,7 +54,7 @@ const Career = () => {
                 <h4>Developer Student</h4>
                 <h5>Apple Developer Academy @ UNINA Federico II · Naples</h5>
               </div>
-              <h3>NOW</h3>
+              <h3>2025</h3>
             </div>
             <p>
               Selected from a highly competitive global pool. Spearheading
@@ -62,6 +62,26 @@ const Career = () => {
               advanced SwiftUI architecture, CoreML/Vision integration,
               Human Interface Guidelines, and end-to-end App Store
               lifecycle management.
+            </p>
+          </div>
+          <div className="career-info-box">
+            <div className="career-info-in">
+              <div className="career-role">
+                <h4>Freelance iOS &amp; Web Developer</h4>
+                <h5>Self-employed · Naples, Italy</h5>
+              </div>
+              <h3>NOW</h3>
+            </div>
+            <p>
+              Designing, building, and shipping production software for paying
+              clients. Delivered <strong>Pizz'Art Caserta</strong> — a Next.js
+              site (~98% TypeScript) with a reservation flow handling ~300
+              bookings/month, internationalized and SEO-optimized on Vercel
+              behind Cloudflare. Published <strong>InShorts Italia</strong>, a
+              native iOS news aggregator with 400+ App Store downloads pulling
+              70+ Italian sources across 9 categories via a Firebase Cloud
+              Functions backend. Shipping across iOS, iPadOS, macOS, and
+              visionOS in Swift and SwiftUI.
             </p>
           </div>
         </div>

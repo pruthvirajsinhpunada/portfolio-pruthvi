@@ -7,6 +7,7 @@ import Cursor from "./Cursor";
 import ParticleHero from "./ParticleHero";
 import Navbar from "./Navbar";
 import ProjectsShowcase from "./ProjectsShowcase";
+import Skills from "./Skills";
 import SocialIcons from "./SocialIcons";
 import WhatIDo from "./WhatIDo";
 import setSplitText from "./utils/splitText";
@@ -39,6 +40,7 @@ const MainContainer = () => {
             <WhatIDo />
             <Career />
             <ProjectsShowcase />
+            <Skills />
             <Suspense fallback={<div>Loading....</div>}>
               <TechStack />
             </Suspense>

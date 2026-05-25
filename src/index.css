@@ -7,8 +7,8 @@
   font-style: normal;
   line-height: 1.5;
   scroll-behavior: smooth;
-  color-scheme: light dark;
-  color: #eae5ec;
+  color-scheme: dark;
+  color: #eaf2ff;
   background-color: var(--backgroundColor);
 
   font-synthesis: none;
@@ -18,8 +18,11 @@
   user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;
-  --accentColor: #ff8a5c;
-  --backgroundColor: #050406;
+  /* Spatial Noir palette */
+  --accentColor: #38e1ff;   /* electric cyan */
+  --accent2: #8b6cff;       /* aurora violet */
+  --textColor: #eaf2ff;     /* near-white */
+  --backgroundColor: #05060a;
   background-color: var(--backgroundColor);
   --vh: 100vh;
   --vh: 100svh;

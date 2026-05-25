@@ -7,8 +7,9 @@ const LINE_1 = "PRUTHVIRAJSINH";
 const LINE_2 = "PUNADA";
 
 const FONT_FAMILY = "Geist, sans-serif";
-const PARTICLE_COLOR = new THREE.Color("#0F1E2E");
-const PARTICLE_ACCENT = new THREE.Color("#FF6B35");
+const PARTICLE_COLOR = new THREE.Color("#EAF2FF"); // glowing near-white
+const PARTICLE_ACCENT = new THREE.Color("#38E1FF"); // electric cyan
+const PARTICLE_ACCENT_2 = new THREE.Color("#8B6CFF"); // aurora violet
 
 type HomePositions = {
   positions: Float32Array;
@@ -67,8 +68,9 @@ function sampleTextPositions(
         const worldZ = (Math.random() - 0.5) * 0.08;
         points.push(worldX, worldY, worldZ);
 
-        const useAccent = Math.random() < 0.08;
-        const c = useAccent ? PARTICLE_ACCENT : PARTICLE_COLOR;
+        const roll = Math.random();
+        const c =
+          roll < 0.1 ? PARTICLE_ACCENT : roll < 0.16 ? PARTICLE_ACCENT_2 : PARTICLE_COLOR;
         colors.push(c.r, c.g, c.b);
       }
     }
@@ -85,7 +87,7 @@ function ParticleField({ mouse }: { mouse: React.MutableRefObject<THREE.Vector2>
   const pointsRef = useRef<THREE.Points>(null);
   const { viewport } = useThree();
 
-  const home = useMemo(() => sampleTextPositions(LINE_1, LINE_2, 4), []);
+  const home = useMemo(() => sampleTextPositions(LINE_1, LINE_2, 5), []);
 
   const currentPositions = useMemo(
     () => new Float32Array(home.positions),
@@ -179,12 +181,13 @@ function ParticleField({ mouse }: { mouse: React.MutableRefObject<THREE.Vector2>
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.022}
+        size={0.026}
         vertexColors
         sizeAttenuation
         transparent
-        opacity={0.98}
+        opacity={0.95}
         depthWrite={false}
+        blending={THREE.AdditiveBlending}
       />
     </points>
   );
@@ -228,7 +231,7 @@ function OrbitIcons({ scrollProgress }: { scrollProgress: number }) {
             className="orbit-icon"
             style={{
               transform: `translate3d(${x}px, ${y}px, 0) scale(${scale})`,
-              filter: `blur(${blur}px) drop-shadow(0 10px 24px rgba(15, 30, 46, 0.18))`,
+              filter: `blur(${blur}px) drop-shadow(0 6px 22px rgba(56, 225, 255, 0.28))`,
               zIndex: Math.round(depth * 100),
               opacity: 0.5 + depth * 0.5,
             }}
@@ -244,6 +247,7 @@ function OrbitIcons({ scrollProgress }: { scrollProgress: number }) {
 const ParticleHero = () => {
   const mouse = useRef(new THREE.Vector2(-9999, -9999));
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [frameloop, setFrameloop] = useState<"always" | "never">("always");
 
   useEffect(() => {
     const handleMove = (e: MouseEvent) => {
@@ -285,6 +289,8 @@ const ParticleHero = () => {
             "hero-in-view",
             entry.isIntersecting && entry.intersectionRatio > 0.25
           );
+          // Pause the GPU render + per-particle physics loop when off-screen
+          setFrameloop(entry.isIntersecting ? "always" : "never");
         },
         { threshold: [0, 0.25, 0.5, 0.75, 1] }
       );
@@ -313,7 +319,8 @@ const ParticleHero = () => {
         <Canvas
           camera={{ position: [0, 0, 8], fov: 50 }}
           gl={{ antialias: true, alpha: true }}
-          dpr={[1, 2]}
+          dpr={[1, 1.5]}
+          frameloop={frameloop}
         >
           <ParticleField mouse={mouse} />
         </Canvas>
