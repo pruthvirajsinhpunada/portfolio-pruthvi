@@ -1,183 +1,129 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { MdArrowOutward } from "react-icons/md";
 import { projects } from "../data/projects";
-import Gallery3D from "./gallery/Gallery3D";
 import "./styles/ProjectsShowcase.css";
-import "./styles/Gallery.css";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-const useImmersiveCapable = () => {
-  const [capable, setCapable] = useState(true);
-  useLayoutEffect(() => {
-    const check = () => {
-      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const narrow = window.innerWidth < 880;
-      setCapable(!reduce && !narrow);
-    };
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
-  return capable;
-};
+type QuickTo = ReturnType<typeof gsap.quickTo>;
 
 const ProjectsShowcase = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const stageRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const progressRef = useRef(0);
+  const revealRef = useRef<HTMLDivElement>(null);
+  const xTo = useRef<QuickTo | null>(null);
+  const yTo = useRef<QuickTo | null>(null);
+  const [active, setActive] = useState<number | null>(null);
   const navigate = useNavigate();
-  const immersive = useImmersiveCapable();
-  // Only render the 3D gallery (shadows + reflections) while it's on screen
-  const [galleryActive, setGalleryActive] = useState(false);
 
-  // Scroll-pin the gallery for the duration of the dolly
   useGSAP(
     () => {
-      if (!immersive) return;
-      const stage = stageRef.current;
-      const track = trackRef.current;
-      if (!stage || !track) return;
+      if (revealRef.current) {
+        gsap.set(revealRef.current, { xPercent: -50, yPercent: -50 });
+        xTo.current = gsap.quickTo(revealRef.current, "x", {
+          duration: 0.55,
+          ease: "power3",
+        });
+        yTo.current = gsap.quickTo(revealRef.current, "y", {
+          duration: 0.55,
+          ease: "power3",
+        });
+      }
 
-      const trigger = ScrollTrigger.create({
-        trigger: track,
-        start: "top top",
-        end: "bottom bottom",
-        scrub: true,
-        pin: stage,
-        pinSpacing: false,
-        onUpdate: (self) => {
-          progressRef.current = self.progress;
-        },
-      });
-
-      return () => {
-        trigger.kill();
-      };
-    },
-    { dependencies: [immersive] }
-  );
-
-  // Animate header on first reveal
-  useGSAP(
-    () => {
+      // immediateRender:false + once keeps rows from getting stuck at opacity:0
+      // when the section is jumped to via the nav anchor (skipping the trigger).
       gsap.from(".pw-header > *", {
         y: 32,
         opacity: 0,
         stagger: 0.1,
         duration: 0.9,
         ease: "power3.out",
-        scrollTrigger: { trigger: ".pw-header", start: "top 85%" },
+        immediateRender: false,
+        scrollTrigger: { trigger: ".pw-header", start: "top 90%", once: true },
       });
+      gsap.from(".rg-row", {
+        y: 40,
+        opacity: 0,
+        stagger: 0.07,
+        duration: 0.8,
+        ease: "power3.out",
+        immediateRender: false,
+        scrollTrigger: { trigger: ".rg-list", start: "top 92%", once: true },
+      });
+
+      ScrollTrigger.refresh();
     },
     { scope: sectionRef }
   );
 
-  useEffect(() => {
-    return () => {
-      progressRef.current = 0;
-    };
-  }, []);
-
-  // Gate the gallery render loop on visibility of its scroll track
-  useEffect(() => {
-    if (!immersive) return;
-    const el = trackRef.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([entry]) => setGalleryActive(entry.isIntersecting),
-      { threshold: 0, rootMargin: "200px 0px" }
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, [immersive]);
-
-  const onSelect = (slug: string) => {
-    navigate(`/projects/${slug}`);
+  const handleMove = (e: React.MouseEvent) => {
+    xTo.current?.(e.clientX);
+    yTo.current?.(e.clientY);
   };
 
-  // Track height drives the scroll distance for the pin (one viewport per ~1.4 monoliths)
-  const trackHeight = `${Math.max(180, projects.length * 70)}vh`;
-
   return (
-    <section className="pw-section" id="work" ref={sectionRef}>
+    <section
+      className="pw-section"
+      id="work"
+      ref={sectionRef}
+      onMouseMove={handleMove}
+    >
       <div className="pw-container section-container">
         <header className="pw-header">
           <span className="pw-kicker">// selected work</span>
           <h2 className="pw-title">
-            Walk the <span className="pw-title-accent">gallery</span>.
+            Selected <span className="pw-title-accent">work</span>.
           </h2>
           <p className="pw-lede">
-            {immersive ? (
-              <>
-                Nine projects, each in their own light.{" "}
-                <span className="pw-hint">Scroll to dolly through · Click any monolith to enter.</span>
-              </>
-            ) : (
-              <>
-                Nine projects, each in their own light.{" "}
-                <span className="pw-hint">Tap a tile to open the case study.</span>
-              </>
-            )}
+            Eight things I've designed, built, and shipped.{" "}
+            <span className="pw-hint">Hover to peek · click to open.</span>
           </p>
         </header>
+
+        <ul
+          className="rg-list"
+          onMouseLeave={() => setActive(null)}
+          data-hovering={active !== null}
+        >
+          {projects.map((p, i) => (
+            <li
+              key={p.slug}
+              className="rg-row"
+              data-active={active === i}
+              style={{ ["--accent" as string]: p.accent } as React.CSSProperties}
+              onMouseEnter={() => setActive(i)}
+              onClick={() => navigate(`/projects/${p.slug}`)}
+              data-cursor="disable"
+            >
+              <span className="rg-index">{String(i + 1).padStart(2, "0")}</span>
+              <span className="rg-title">{p.title}</span>
+              <span className="rg-thumb" aria-hidden>
+                <img src={p.image} alt="" loading="lazy" />
+              </span>
+              <span className="rg-meta">{p.category}</span>
+              <span className="rg-year">{p.year}</span>
+              <MdArrowOutward className="rg-arrow" />
+            </li>
+          ))}
+        </ul>
       </div>
 
-      {immersive ? (
-        <div
-          ref={trackRef}
-          className="gx-track"
-          style={{ height: trackHeight }}
-        >
-          <div ref={stageRef} className="gx-stage">
-            <Gallery3D
-              projects={projects}
-              progressRef={progressRef}
-              onSelect={onSelect}
-              frameloop={galleryActive ? "always" : "never"}
-            />
-            <div className="gx-edge gx-edge-left" />
-            <div className="gx-edge gx-edge-right" />
-            <div className="gx-hint">
-              <span>scroll</span>
-              <span className="gx-hint-bar" />
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div className="gx-fallback">
-          <div className="gx-fallback-strip">
-            {projects.map((p, i) => (
-              <button
-                key={p.slug}
-                className="gx-fallback-card"
-                style={{ ["--accent" as string]: p.accent } as React.CSSProperties}
-                onClick={() => onSelect(p.slug)}
-                data-cursor="disable"
-              >
-                <div className="gx-fallback-media">
-                  <img src={p.monolith || p.image} alt={p.title} loading="lazy" />
-                </div>
-                <div className="gx-fallback-body">
-                  <span className="gx-fallback-num">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <span className="gx-fallback-arrow">
-                    <MdArrowOutward />
-                  </span>
-                  <h3 className="gx-fallback-title">{p.title}</h3>
-                  <p className="gx-fallback-cat">{p.category}</p>
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* Cursor-following image reveal (pointer devices only) */}
+      <div className="rg-reveal" ref={revealRef} data-show={active !== null}>
+        {projects.map((p, i) => (
+          <img
+            key={p.slug}
+            className="rg-reveal-img"
+            src={p.image}
+            alt=""
+            loading="lazy"
+            data-on={active === i}
+          />
+        ))}
+      </div>
     </section>
   );
 };

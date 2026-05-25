@@ -40,7 +40,7 @@ export const projects: Project[] = [
     summary: "Spatial chess for Apple Vision Pro — AI + live online play.",
     description:
       "A chess game for Apple Vision Pro: play a Stockfish AI or real opponents online via Lichess, on an immersive RealityKit board with full game review and puzzles. Built as a team project — I integrated the Stockfish C++ engine into Swift and helped build the live multiplayer layer; my work is merged into the main repo.",
-    image: "/images/projects/livechess/hero.webp",
+    image: "/images/projects/livechess/gallery/01-menu.webp",
     hero: "/images/projects/livechess/hero.webp",
     monolith: "/images/projects/livechess/monolith.webp",
     gallery: [
@@ -112,7 +112,7 @@ export const projects: Project[] = [
     summary: "On-device sign language interpreter.",
     description:
       "An on-device sign-language interpreter using CoreML and the Vision framework to make communication more accessible. My Swift Student Challenge 2026 submission.",
-    image: "/images/projects/signbridge/hero.webp",
+    image: "/images/projects/signbridge/gallery/01-drill.webp",
     hero: "/images/projects/signbridge/hero.webp",
     monolith: "/images/projects/signbridge/monolith.webp",
     gallery: [
@@ -210,7 +210,12 @@ export const projects: Project[] = [
     image: "/images/projects/inshorts-italia/hero.webp",
     hero: "/images/projects/inshorts-italia/hero.webp",
     monolith: "/images/projects/inshorts-italia/monolith.webp",
-    gallery: [],
+    gallery: [
+      "/images/projects/inshorts-italia/gallery/01-home.webp",
+      "/images/projects/inshorts-italia/gallery/02-discover.webp",
+      "/images/projects/inshorts-italia/gallery/03-settings.webp",
+    ],
+    galleryPortrait: true,
     link: "https://github.com/pruthvirajsinhpunada/InShorts-News-App",
     appStoreLink: "https://apps.apple.com/app/inshorts-italia",
     accent: "#ffb84a",
@@ -266,7 +271,13 @@ export const projects: Project[] = [
     image: "/images/projects/citycircle/hero.webp",
     hero: "/images/projects/citycircle/hero.webp",
     monolith: "/images/projects/citycircle/monolith.webp",
-    gallery: [],
+    gallery: [
+      "/images/projects/citycircle/gallery/01-login.webp",
+      "/images/projects/citycircle/gallery/02-event.webp",
+      "/images/projects/citycircle/gallery/03-profile.webp",
+      "/images/projects/citycircle/gallery/04-language.webp",
+    ],
+    galleryPortrait: true,
     link: "https://github.com/pruthvirajsinhpunada/CityCircle",
     accent: "#ff5d8f",
     caseStudy: {

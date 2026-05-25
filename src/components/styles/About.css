@@ -94,24 +94,29 @@
   .about-section {
     flex-direction: row;
     align-items: center;
-    justify-content: center;
-    gap: 80px;
+    justify-content: space-between;
+    gap: 5vw;
     width: var(--cWidth);
     max-width: 1920px;
     height: var(--vh);
     padding: 0;
   }
   .about-photo {
-    width: 38%;
-    max-width: 520px;
+    width: 40%;
+    max-width: 640px;
   }
   .about-me {
-    width: 50%;
+    width: 56%;
     padding: 0;
   }
+  .about-me h3 {
+    font-size: 1.5vw;
+    letter-spacing: 9px;
+    margin-bottom: 1.8vw;
+  }
   .about-me p {
-    font-size: 1.6vw;
-    line-height: 2vw;
+    font-size: 1.85vw;
+    line-height: 2.5vw;
   }
 }
 

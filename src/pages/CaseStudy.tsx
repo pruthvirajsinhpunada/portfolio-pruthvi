@@ -85,10 +85,6 @@ const CaseStudy = () => {
       </Link>
 
       <header className="cs-hero">
-        <div className="cs-hero-media">
-          <img src={project.hero} alt={project.title} />
-          <div className="cs-hero-veil" />
-        </div>
         <div className="cs-hero-body">
           <span className="cs-kicker">// {project.category.toLowerCase()}</span>
           <h1 className="cs-title">{project.title}</h1>

@@ -74,18 +74,20 @@ const Skills = () => {
         </p>
       </div>
 
-      <div className="skills-grid">
-        {categories.map((cat) => (
-          <div key={cat.label} className="skills-card">
-            <div className="skills-card-rail" aria-hidden />
-            <h3 className="skills-card-label">{cat.label}</h3>
-            <div className="skills-tags">
+      <div className="skills-list">
+        {categories.map((cat, i) => (
+          <div className="skills-row" key={cat.label}>
+            <h3 className="skills-row-label">
+              <span className="skills-row-num">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              {cat.label}
+            </h3>
+            <ul className="skills-row-items">
               {cat.skills.map((s) => (
-                <span key={s} className="skills-tag">
-                  {s}
-                </span>
+                <li key={s}>{s}</li>
               ))}
-            </div>
+            </ul>
           </div>
         ))}
       </div>
