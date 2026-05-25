@@ -280,6 +280,16 @@
   display: block;
 }
 
+/* Portrait galleries (phone screenshots): frame upright and show the whole screen. */
+.cs-gallery-item--portrait {
+  aspect-ratio: 3 / 4;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
+}
+.cs-gallery-item--portrait img {
+  object-fit: contain;
+  padding: 12px;
+}
+
 .cs-lightbox {
   position: fixed;
   inset: 0;

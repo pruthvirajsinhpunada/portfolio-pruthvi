@@ -19,6 +19,8 @@ export interface Project {
   hero: string;
   monolith: string;
   gallery: string[];
+  /** Set when gallery images are portrait (e.g. phone screenshots) so the grid frames them upright. */
+  galleryPortrait?: boolean;
   liveUrl?: string;
   link: string;
   appStoreLink?: string;
@@ -79,11 +81,11 @@ export const projects: Project[] = [
     monolith: "/images/projects/pizzart-caserta/monolith.webp",
     gallery: [
       "/images/projects/pizzart-caserta/gallery/01-home.webp",
-      "/images/projects/pizzart-caserta/gallery/02-menu.webp",
-      "/images/projects/pizzart-caserta/gallery/03-contatti.webp",
-      "/images/projects/pizzart-caserta/gallery/04-prenota.webp",
-      "/images/projects/pizzart-caserta/gallery/05-home-mobile.webp",
-      "/images/projects/pizzart-caserta/gallery/06-menu-mobile.webp",
+      "/images/projects/pizzart-caserta/gallery/02-chi-siamo.webp",
+      "/images/projects/pizzart-caserta/gallery/03-menu.webp",
+      "/images/projects/pizzart-caserta/gallery/04-galleria.webp",
+      "/images/projects/pizzart-caserta/gallery/05-contatti.webp",
+      "/images/projects/pizzart-caserta/gallery/06-prenota.webp",
     ],
     liveUrl: "https://pizzartcaserta.it",
     link: "https://pizzartcaserta.it",
@@ -100,32 +102,6 @@ export const projects: Project[] = [
     },
   },
   {
-    slug: "pinball-vision",
-    title: "PinballVision",
-    category: "visionOS · Spatial Game",
-    year: "2026",
-    role: "Solo dev",
-    status: "in-development",
-    tools: "Swift, RealityKit, visionOS, Spatial Audio, Game Center",
-    summary: "Spatial pinball for Apple Vision Pro.",
-    description:
-      "A fully spatial pinball game for Apple Vision Pro. Built a custom Blender → USDZ → RealityKit pipeline with physics, spatial audio, and Game Center leaderboards.",
-    image: "/images/projects/pinball-vision/hero.webp",
-    hero: "/images/projects/pinball-vision/hero.webp",
-    monolith: "/images/projects/pinball-vision/monolith.webp",
-    gallery: [],
-    link: "https://github.com/pruthvirajsinhpunada/PinballVision",
-    accent: "#c14dff",
-    caseStudy: {
-      problem:
-        "Pinball is a tactile, physics-driven game — translating it to a headset means re-thinking input, scale, and audio cues without losing the kinetic feel.",
-      approach:
-        "Authored the table in Blender, exported to USDZ, drove physics + collisions in RealityKit, and used spatial audio so the ball is locatable by ear alone. Game Center wired in for leaderboards.",
-      outcome:
-        "Working spatial prototype with full physics, spatial audio, and leaderboard plumbing. Active development.",
-    },
-  },
-  {
     slug: "signbridge",
     title: "SignBridge",
     category: "Accessibility AI · Swift Student Challenge 2026",
@@ -139,7 +115,13 @@ export const projects: Project[] = [
     image: "/images/projects/signbridge/hero.webp",
     hero: "/images/projects/signbridge/hero.webp",
     monolith: "/images/projects/signbridge/monolith.webp",
-    gallery: [],
+    gallery: [
+      "/images/projects/signbridge/gallery/01-drill.webp",
+      "/images/projects/signbridge/gallery/02-express.webp",
+      "/images/projects/signbridge/gallery/03-live-detect.webp",
+      "/images/projects/signbridge/gallery/04-goal-challenge.webp",
+      "/images/projects/signbridge/gallery/05-heart-catch.webp",
+    ],
     link: "https://github.com/pruthvirajsinhpunada/signbridge",
     accent: "#4ea0ff",
     caseStudy: {
@@ -165,7 +147,13 @@ export const projects: Project[] = [
     image: "/images/projects/shiftbook/hero.webp",
     hero: "/images/projects/shiftbook/hero.webp",
     monolith: "/images/projects/shiftbook/monolith.webp",
-    gallery: [],
+    gallery: [
+      "/images/projects/shiftbook/gallery/01-schedule.webp",
+      "/images/projects/shiftbook/gallery/02-staff.webp",
+      "/images/projects/shiftbook/gallery/03-account.webp",
+      "/images/projects/shiftbook/gallery/04-onboarding.webp",
+    ],
+    galleryPortrait: true,
     link: "https://github.com/pruthvirajsinhpunada/ShiftBook",
     appStoreLink: "https://apps.apple.com/app/shiftbook",
     accent: "#39d29a",
@@ -192,7 +180,11 @@ export const projects: Project[] = [
     image: "/images/projects/betterfinder/hero.webp",
     hero: "/images/projects/betterfinder/hero.webp",
     monolith: "/images/projects/betterfinder/monolith.webp",
-    gallery: [],
+    gallery: [
+      "/images/projects/betterfinder/gallery/01-smart-rename.webp",
+      "/images/projects/betterfinder/gallery/02-dark-terminal.webp",
+      "/images/projects/betterfinder/gallery/03-file-list.webp",
+    ],
     link: "https://github.com/Hardin22/BetterFinder",
     accent: "#7d8cff",
     caseStudy: {

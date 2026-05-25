@@ -188,7 +188,7 @@ const CaseStudy = () => {
             {project.gallery.map((src, i) => (
               <button
                 key={src}
-                className="cs-gallery-item"
+                className={`cs-gallery-item${project.galleryPortrait ? " cs-gallery-item--portrait" : ""}`}
                 onClick={() => setLightboxIndex(i)}
                 data-cursor="disable"
                 aria-label={`Open image ${i + 1}`}

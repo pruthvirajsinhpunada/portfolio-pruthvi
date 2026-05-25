@@ -26,9 +26,9 @@ const items: Item[] = [
     title: "Spatial & visionOS",
     subtitle: "Apple Vision Pro",
     glyph: "\u2B22",
-    tagline: "First-to-ship pinball for Apple Vision Pro.",
-    desc: "Building for Apple Vision Pro \u2014 a custom Blender \u2192 USDZ \u2192 RealityKit pipeline for PinballVision, with spatial audio, physics, and Game Center integration. Early in the visionOS market, first to ship.",
-    tags: ["visionOS", "RealityKit", "ARKit", "Reality Composer Pro", "SpriteKit", "Spatial Audio", "Blender", "USDZ", "Game Center"],
+    tagline: "Spatial chess for Apple Vision Pro \u2014 AI + live online play.",
+    desc: "Building for Apple Vision Pro \u2014 immersive RealityKit scenes with a Blender \u2192 USDZ pipeline. On LiveChess I integrated the Stockfish C++ engine into Swift and built the live Lichess multiplayer layer, with custom 3D environments and spatial UI.",
+    tags: ["visionOS", "RealityKit", "Swift \u2194 C++", "Stockfish", "Lichess API", "Reality Composer Pro", "Blender", "USDZ"],
   },
   {
     num: "03",

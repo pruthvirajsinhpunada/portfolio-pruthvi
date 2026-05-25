@@ -21,7 +21,7 @@ const About = () => {
           SpriteKit, and on-device machine learning (CoreML, Vision,
           RealityKit) to ship empathetic, high-performance experiences —
           from Swift Student Challenge projects on sign-language
-          recognition to a pinball game for Apple Vision Pro. Currently a
+          recognition to spatial chess for Apple Vision Pro. Currently a
           Developer Student at the Apple Developer Academy @ UNINA
           Federico II in Naples, with a foundation in mathematical
           modeling and Support Vector Machines from my Data Analytics
