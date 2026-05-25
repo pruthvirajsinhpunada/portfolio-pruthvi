@@ -1,64 +1,90 @@
+import type { IconType } from "react-icons";
+import {
+  SiSwift,
+  SiPython,
+  SiTypescript,
+  SiJavascript,
+  SiCplusplus,
+  SiReact,
+  SiNextdotjs,
+  SiThreedotjs,
+  SiBlender,
+  SiGit,
+  SiFirebase,
+  SiVercel,
+  SiPytorch,
+  SiTensorflow,
+  SiScikitlearn,
+  SiWebgl,
+  SiApple,
+  SiXcode,
+} from "react-icons/si";
+import {
+  FaDatabase,
+  FaCube,
+  FaVrCardboard,
+  FaBrain,
+  FaEye,
+  FaArrowsRotate,
+  FaGamepad,
+  FaVideo,
+  FaServer,
+  FaCodeBranch,
+  FaLayerGroup,
+  FaChartLine,
+} from "react-icons/fa6";
 import "./styles/Skills.css";
 
-type Category = {
-  label: string;
-  skills: string[];
-};
+type Skill = { name: string; Icon: IconType };
 
-const categories: Category[] = [
-  {
-    label: "Languages",
-    skills: ["Swift", "Python", "TypeScript", "JavaScript", "C++", "SQL"],
-  },
-  {
-    label: "Apple Frameworks",
-    skills: [
-      "SwiftUI",
-      "UIKit",
-      "AppKit",
-      "RealityKit",
-      "ARKit",
-      "Core ML",
-      "Vision",
-      "Combine",
-      "SpriteKit",
-      "AVFoundation",
-      "Xcode",
-    ],
-  },
-  {
-    label: "Platforms",
-    skills: ["iOS", "iPadOS", "macOS", "visionOS"],
-  },
-  {
-    label: "Machine Learning & Data",
-    skills: [
-      "PyTorch",
-      "TensorFlow",
-      "scikit-learn",
-      "Computer Vision",
-      "Anomaly Detection",
-      "Data Analysis",
-    ],
-  },
-  {
-    label: "Web & 3D",
-    skills: [
-      "React",
-      "Next.js",
-      "Three.js",
-      "React Three Fiber",
-      "WebGL",
-      "Blender",
-      "USDZ",
-      "glTF",
-    ],
-  },
-  {
-    label: "Tools & Practices",
-    skills: ["Git", "Firebase", "Vercel", "REST APIs", "CI/CD", "MVVM", "Agile"],
-  },
+const skills: Skill[] = [
+  { name: "Swift", Icon: SiSwift },
+  { name: "Python", Icon: SiPython },
+  { name: "TypeScript", Icon: SiTypescript },
+  { name: "JavaScript", Icon: SiJavascript },
+  { name: "C++", Icon: SiCplusplus },
+  { name: "SQL", Icon: FaDatabase },
+  { name: "SwiftUI", Icon: SiSwift },
+  { name: "UIKit", Icon: SiApple },
+  { name: "AppKit", Icon: SiApple },
+  { name: "RealityKit", Icon: FaCube },
+  { name: "ARKit", Icon: FaVrCardboard },
+  { name: "Core ML", Icon: FaBrain },
+  { name: "Vision", Icon: FaEye },
+  { name: "Combine", Icon: FaArrowsRotate },
+  { name: "SpriteKit", Icon: FaGamepad },
+  { name: "AVFoundation", Icon: FaVideo },
+  { name: "Xcode", Icon: SiXcode },
+  { name: "iOS", Icon: SiApple },
+  { name: "iPadOS", Icon: SiApple },
+  { name: "macOS", Icon: SiApple },
+  { name: "visionOS", Icon: FaVrCardboard },
+  { name: "PyTorch", Icon: SiPytorch },
+  { name: "TensorFlow", Icon: SiTensorflow },
+  { name: "scikit-learn", Icon: SiScikitlearn },
+  { name: "Computer Vision", Icon: FaEye },
+  { name: "Anomaly Detection", Icon: FaChartLine },
+  { name: "Data Analysis", Icon: FaChartLine },
+  { name: "React", Icon: SiReact },
+  { name: "Next.js", Icon: SiNextdotjs },
+  { name: "Three.js", Icon: SiThreedotjs },
+  { name: "React Three Fiber", Icon: SiReact },
+  { name: "WebGL", Icon: SiWebgl },
+  { name: "Blender", Icon: SiBlender },
+  { name: "USDZ", Icon: FaCube },
+  { name: "glTF", Icon: FaCube },
+  { name: "Git", Icon: SiGit },
+  { name: "Firebase", Icon: SiFirebase },
+  { name: "Vercel", Icon: SiVercel },
+  { name: "REST APIs", Icon: FaServer },
+  { name: "CI/CD", Icon: FaCodeBranch },
+  { name: "MVVM", Icon: FaLayerGroup },
+  { name: "Agile", Icon: FaArrowsRotate },
 ];
+
+// Deal skills round-robin into 3 rows so brand logos spread evenly.
+const rows: Skill[][] = [[], [], []];
+skills.forEach((s, i) => rows[i % 3].push(s));
 
 const Skills = () => {
   return (
@@ -74,18 +100,22 @@ const Skills = () => {
         </p>
       </div>
 
-      <div className="skills-list">
-        {categories.map((cat, i) => (
-          <div className="skills-row" key={cat.label}>
-            <h3 className="skills-row-label">
-              <span className="skills-row-num">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              {cat.label}
-            </h3>
-            <ul className="skills-row-items">
-              {cat.skills.map((s) => (
-                <li key={s}>{s}</li>
+      <div className="skills-marquee" aria-label="Skills and tools">
+        {rows.map((row, r) => (
+          <div className={`mq-row${r % 2 === 1 ? " mq-row--rev" : ""}`} key={r}>
+            <ul
+              className="mq-track"
+              style={{ animationDuration: `${46 + r * 9}s` }}
+            >
+              {[...row, ...row].map((s, i) => (
+                <li
+                  className="mq-item"
+                  key={`${s.name}-${i}`}
+                  aria-hidden={i >= row.length}
+                >
+                  <s.Icon className="mq-icon" />
+                  <span>{s.name}</span>
+                </li>
               ))}
             </ul>
           </div>

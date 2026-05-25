@@ -47,74 +47,77 @@
   margin: 0;
 }
 
-/* ---------- Editorial rows (matches the Work list) ---------- */
-.skills-list {
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-.skills-row {
-  display: grid;
-  grid-template-columns: clamp(190px, 24%, 300px) 1fr;
-  align-items: baseline;
-  gap: 40px;
-  padding: clamp(22px, 2.4vw, 36px) 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-  transition: background 0.35s ease;
-}
-
-.skills-row:hover {
-  background: linear-gradient(
-    90deg,
-    color-mix(in srgb, var(--accentColor) 6%, transparent),
-    transparent 60%
-  );
-}
-
-.skills-row-label {
+/* ---------- Logo marquee ---------- */
+.skills-marquee {
   display: flex;
-  align-items: baseline;
-  gap: 14px;
-  margin: 0;
-  font-family: "Geist Mono", "JetBrains Mono", monospace;
-  font-size: 13px;
-  font-weight: 400;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--accentColor);
-  opacity: 0.85;
+  flex-direction: column;
+  gap: clamp(14px, 1.8vw, 28px);
+  /* Full-bleed even though the section is centered with a max-width */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
 }
 
-.skills-row-num {
-  font-size: 11px;
-  opacity: 0.45;
-  color: var(--textColor);
-  letter-spacing: 1px;
+.mq-row {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
 }
 
-.skills-row-items {
-  list-style: none;
+.mq-track {
+  display: flex;
+  align-items: center;
+  width: max-content;
   margin: 0;
   padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  row-gap: 10px;
+  list-style: none;
+  animation-name: mq-scroll;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
 }
 
-.skills-row-items li {
-  font-size: clamp(16px, 1.25vw, 22px);
-  font-weight: 400;
+.mq-row--rev .mq-track {
+  animation-direction: reverse;
+}
+
+.mq-row:hover .mq-track {
+  animation-play-state: paused;
+}
+
+@keyframes mq-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.mq-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px clamp(22px, 2.4vw, 42px);
+  font-size: clamp(17px, 1.5vw, 26px);
+  font-weight: 500;
   letter-spacing: -0.01em;
-  opacity: 0.82;
-  transition: opacity 0.3s ease, color 0.3s ease;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.42);
+  transition: color 0.3s ease;
 }
 
-.skills-row-items li:not(:last-child)::after {
-  content: "·";
-  margin: 0 14px;
-  opacity: 0.3;
+.mq-icon {
+  font-size: 1.3em;
+  opacity: 0.85;
+  flex-shrink: 0;
+  transition: color 0.3s ease, opacity 0.3s ease;
 }
 
-.skills-row:hover .skills-row-items li {
+.mq-item:hover {
+  color: #fff;
+}
+
+.mq-item:hover .mq-icon {
+  color: var(--accentColor);
   opacity: 1;
 }
 
@@ -125,12 +128,10 @@
   .skills-head {
     margin-bottom: 40px;
   }
-  .skills-row {
-    grid-template-columns: 1fr;
-    gap: 14px;
-    padding: 24px 4px;
-  }
-  .skills-row-items li {
-    font-size: 17px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mq-track {
+    animation: none;
   }
 }

@@ -257,14 +257,16 @@
   display: block;
 }
 
-/* Portrait galleries (phone screenshots): frame upright and show the whole screen. */
+/* Portrait galleries (phone screenshots / mockups): show the whole image at its
+   natural shape — fills the column width, no fixed box, no letterbox dead space. */
 .cs-gallery-item--portrait {
-  aspect-ratio: 3 / 4;
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
+  aspect-ratio: auto;
+  background: transparent;
+  align-self: start;
 }
 .cs-gallery-item--portrait img {
+  height: auto;
   object-fit: contain;
-  padding: 12px;
 }
 
 .cs-lightbox {
