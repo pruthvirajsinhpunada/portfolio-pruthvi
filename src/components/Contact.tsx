@@ -76,15 +76,15 @@ const Contact = () => {
             </a>
           </div>
 
-          <div className="contact-col contact-col-colo">
-            <p className="contact-colo">
-              Designed &amp; developed by{" "}
-              <span>Pruthvirajsinh Punada</span>
-            </p>
-            <p className="contact-copyright">
-              <MdCopyright /> 2026 · All rights reserved
-            </p>
-          </div>
+        </div>
+
+        <div className="contact-footer">
+          <p className="contact-colo">
+            Designed &amp; developed by <span>Pruthvirajsinh Punada</span>
+          </p>
+          <p className="contact-copyright">
+            <MdCopyright /> 2026 · All rights reserved
+          </p>
         </div>
       </div>
     </section>
