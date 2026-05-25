@@ -41,7 +41,15 @@ export const projects: Project[] = [
     image: "/images/projects/livechess/hero.webp",
     hero: "/images/projects/livechess/hero.webp",
     monolith: "/images/projects/livechess/monolith.webp",
-    gallery: [],
+    gallery: [
+      "/images/projects/livechess/gallery/01-menu.webp",
+      "/images/projects/livechess/gallery/02-ar-room.webp",
+      "/images/projects/livechess/gallery/03-local-stockfish.webp",
+      "/images/projects/livechess/gallery/04-online-lichess.webp",
+      "/images/projects/livechess/gallery/05-dwarven-hall.webp",
+      "/images/projects/livechess/gallery/06-balcony.webp",
+      "/images/projects/livechess/gallery/07-auditorium.webp",
+    ],
     link: "https://github.com/pruthvirajsinhpunada/LiveChess",
     accent: "#caa45d",
     caseStudy: {
