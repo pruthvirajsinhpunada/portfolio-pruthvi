@@ -67,21 +67,30 @@ const Career = () => {
           <div className="career-info-box">
             <div className="career-info-in">
               <div className="career-role">
-                <h4>Freelance iOS &amp; Web Developer</h4>
-                <h5>Self-employed · Naples, Italy</h5>
+                <h4>Analyst &amp; Web Developer</h4>
+                <h5>Pizz'Art S.r.l.s. · Caserta, Italy</h5>
               </div>
-              <h3>NOW</h3>
+              <h3>2025 — 2026</h3>
             </div>
             <p>
-              Designing, building, and shipping production software for paying
-              clients. Delivered <strong>Pizz'Art Caserta</strong> — a Next.js
-              site (~98% TypeScript) with a reservation flow handling ~300
-              bookings/month, internationalized and SEO-optimized on Vercel
-              behind Cloudflare. Published <strong>InShorts Italia</strong>, a
-              native iOS news aggregator with 400+ App Store downloads pulling
-              70+ Italian sources across 9 categories via a Firebase Cloud
-              Functions backend. Shipping across iOS, iPadOS, macOS, and
-              visionOS in Swift and SwiftUI.
+              Designed, built, and maintained the company's website and online
+              reservation system — bookings, email notifications, deployment,
+              and SEO on Vercel behind Cloudflare.
+            </p>
+          </div>
+          <div className="career-info-box">
+            <div className="career-info-in">
+              <div className="career-role">
+                <h4>Freelance Full-Stack &amp; iOS Developer</h4>
+                <h5>Self-employed · Web &amp; Mobile</h5>
+              </div>
+              <h3>2025 — Now</h3>
+            </div>
+            <p>
+              End-to-end design and delivery of web and native apps for paying
+              clients and the App Store — a Next.js restaurant site and a
+              published iOS news app — shipping across iOS, iPadOS, macOS, and
+              visionOS.
             </p>
           </div>
         </div>
