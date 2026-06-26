@@ -205,18 +205,43 @@ const ICONS: IconDef[] = [
   { src: "/images/tech/sketch.webp", label: "Sketch" },
 ];
 
-function OrbitIcons({ scrollProgress }: { scrollProgress: number }) {
-  const reveal = Math.min(scrollProgress * 2.2, 1);
-  if (reveal <= 0.02) return null;
+function OrbitIcons({
+  scrollProgressRef,
+  visibleRef,
+}: {
+  scrollProgressRef: React.MutableRefObject<number>;
+  visibleRef: React.MutableRefObject<boolean>;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const iconRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  const count = ICONS.length;
-  const radiusX = 620;
-  const radiusY = 250;
-  const time = performance.now() / 1000;
+  // Drive the orbit with a single rAF loop that writes styles imperatively.
+  // No React re-render per scroll and no CSS transition on transform/filter,
+  // so the icons can't smear into ghost/double copies while scrolling.
+  useEffect(() => {
+    let raf = 0;
+    const count = ICONS.length;
+    const radiusX = 620;
+    const radiusY = 250;
 
-  return (
-    <div className="orbit-icons" style={{ opacity: reveal }}>
-      {ICONS.map((icon, i) => {
+    const tick = () => {
+      raf = requestAnimationFrame(tick);
+      if (!visibleRef.current) return;
+
+      const scrollProgress = scrollProgressRef.current;
+      const reveal = Math.min(scrollProgress * 2.2, 1);
+      const time = performance.now() / 1000;
+
+      const container = containerRef.current;
+      if (container) {
+        container.style.opacity = String(reveal);
+        container.style.visibility = reveal <= 0.01 ? "hidden" : "visible";
+      }
+      if (reveal <= 0.01) return;
+
+      for (let i = 0; i < count; i++) {
+        const el = iconRefs.current[i];
+        if (!el) continue;
         const baseAngle = (i / count) * Math.PI * 2 - Math.PI / 2;
         const spin = scrollProgress * Math.PI * 0.5 + time * 0.08;
         const angle = baseAngle + spin;
@@ -225,28 +250,42 @@ function OrbitIcons({ scrollProgress }: { scrollProgress: number }) {
         const depth = Math.sin(angle) * 0.5 + 0.5;
         const scale = 0.65 + depth * 0.35 + reveal * 0.1;
         const blur = (1 - depth) * 1.5;
-        return (
-          <div
-            key={icon.label}
-            className="orbit-icon"
-            style={{
-              transform: `translate3d(${x}px, ${y}px, 0) scale(${scale})`,
-              filter: `blur(${blur}px) drop-shadow(0 6px 22px rgba(56, 225, 255, 0.28))`,
-              zIndex: Math.round(depth * 100),
-              opacity: 0.5 + depth * 0.5,
-            }}
-          >
-            <img src={icon.src} alt={icon.label} draggable={false} />
-          </div>
-        );
-      })}
+        el.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
+        el.style.filter = `blur(${blur}px) drop-shadow(0 6px 22px rgba(56, 225, 255, 0.28))`;
+        el.style.zIndex = String(Math.round(depth * 100));
+        el.style.opacity = String(0.5 + depth * 0.5);
+      }
+    };
+
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [scrollProgressRef, visibleRef]);
+
+  return (
+    <div
+      className="orbit-icons"
+      ref={containerRef}
+      style={{ opacity: 0, visibility: "hidden" }}
+    >
+      {ICONS.map((icon, i) => (
+        <div
+          key={icon.label}
+          className="orbit-icon"
+          ref={(el) => {
+            iconRefs.current[i] = el;
+          }}
+        >
+          <img src={icon.src} alt={icon.label} draggable={false} />
+        </div>
+      ))}
     </div>
   );
 }
 
 const ParticleHero = () => {
   const mouse = useRef(new THREE.Vector2(-9999, -9999));
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const scrollProgressRef = useRef(0);
+  const heroVisibleRef = useRef(true);
   const [frameloop, setFrameloop] = useState<"always" | "never">("always");
 
   useEffect(() => {
@@ -267,7 +306,7 @@ const ParticleHero = () => {
         0,
         Math.min(1, -rect.top / (rect.height || 1))
       );
-      setScrollProgress(progress);
+      scrollProgressRef.current = progress;
     };
     const handleScroll = () => {
       if (scrollTicking) return;
@@ -289,6 +328,7 @@ const ParticleHero = () => {
             "hero-in-view",
             entry.isIntersecting && entry.intersectionRatio > 0.25
           );
+          heroVisibleRef.current = entry.isIntersecting;
           // Pause the GPU render + per-particle physics loop when off-screen
           setFrameloop(entry.isIntersecting ? "always" : "never");
         },
@@ -313,7 +353,10 @@ const ParticleHero = () => {
       <div className="particle-hero-blob blob-a" />
       <div className="particle-hero-blob blob-b" />
 
-      <OrbitIcons scrollProgress={scrollProgress} />
+      <OrbitIcons
+        scrollProgressRef={scrollProgressRef}
+        visibleRef={heroVisibleRef}
+      />
 
       <div className="particle-canvas-wrap">
         <Canvas

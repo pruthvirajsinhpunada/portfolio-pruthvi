@@ -125,6 +125,32 @@
   opacity: 0.75;
 }
 
+.particle-hero-aka {
+  position: absolute;
+  top: 64%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  font-family: "Geist", sans-serif;
+  font-size: 15px;
+  font-weight: 300;
+  letter-spacing: 4px;
+  text-transform: lowercase;
+  color: rgba(234, 242, 255, 0.55);
+  pointer-events: none;
+  white-space: nowrap;
+}
+.particle-hero-aka span {
+  color: #38e1ff;
+  font-weight: 500;
+  text-shadow: 0 0 16px rgba(56, 225, 255, 0.5);
+}
+@media screen and (min-width: 768px) {
+  .particle-hero-aka {
+    font-size: 18px;
+  }
+}
+
 .scroll-arrow {
   display: inline-block;
   font-size: 14px;
@@ -148,7 +174,6 @@
   width: 0;
   height: 0;
   pointer-events: none;
-  transition: opacity 0.4s ease;
   z-index: 1;
 }
 
@@ -160,8 +185,11 @@
   height: 88px;
   margin-left: -44px;
   margin-top: -44px;
-  transition: transform 0.08s linear, filter 0.3s ease, opacity 0.3s ease;
+  /* transform/filter/opacity are written every frame by the rAF loop in
+     ParticleHero. A CSS transition here would constantly chase the new value
+     and render lagging "ghost" copies of each icon while scrolling. */
   will-change: transform, filter;
+  backface-visibility: hidden;
 }
 
 .orbit-icon img {
